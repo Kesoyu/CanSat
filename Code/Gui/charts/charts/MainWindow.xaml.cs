@@ -30,8 +30,8 @@ namespace charts
         Random random = new Random();
         const int length = 10;
 
-        private double _axisMax;
-        private double _axisMin;
+        //private double _axisMax;
+        //private double _axisMin;
         private double _trend;
         private double counter = 1;
         public MainWindow()
@@ -44,19 +44,37 @@ namespace charts
             //lets save the mapper globally.
             Charting.For<MeasureModel>(mapper);
 
+            hPa.LabelFormatter = val => val + " hPa";
+            Celcius.LabelFormatter = val => val + " °C";
+            ugm3.LabelFormatter = val => val + " µg/m3";
             //the values property will store our values array
             ChartValues = new ChartValues<MeasureModel>();
+            TemperatureValues = new ChartValues<MeasureModel>();
+            PressureValues = new ChartValues<MeasureModel>();
+            GeoXValues = new ChartValues<MeasureModel>();
+            GeoYValues = new ChartValues<MeasureModel>();
+            GeoZValues = new ChartValues<MeasureModel>();
+            AccXValues = new ChartValues<MeasureModel>();
+            AccYValues = new ChartValues<MeasureModel>();
+            AccZValues = new ChartValues<MeasureModel>();
+            Pm1sValues = new ChartValues<MeasureModel>();
+            Pm2sValues = new ChartValues<MeasureModel>();
+            Pm10sValues = new ChartValues<MeasureModel>();
+            Pm1aValues = new ChartValues<MeasureModel>();
+            Pm2aValues = new ChartValues<MeasureModel>();
+            Pm10aValues = new ChartValues<MeasureModel>();
+            HallaValues = new ChartValues<MeasureModel>();
 
             //lets set how to display the X Labels
-            DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
+            //DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
 
             //AxisStep forces the distance between each separator in the X axis
-            AxisStep = TimeSpan.FromSeconds(1).Ticks;
+            //AxisStep = TimeSpan.FromSeconds(1).Ticks;
             //AxisUnit forces lets the axis know that we are plotting seconds
             //this is not always necessary, but it can prevent wrong labeling
-            AxisUnit = TimeSpan.TicksPerSecond;
+            //AxisUnit = TimeSpan.TicksPerSecond;
 
-            SetAxisLimits(DateTime.Now);
+            //SetAxisLimits(DateTime.Now);
 
             //The next code simulates data changes every 300 ms
 
@@ -65,8 +83,23 @@ namespace charts
             DataContext = this;
         }
         public ChartValues<MeasureModel> ChartValues { get; set; }
-        public Func<double, string> DateTimeFormatter { get; set; }
-        public double AxisStep { get; set; }
+        public ChartValues<MeasureModel> TemperatureValues { get; set; }
+        public ChartValues<MeasureModel> PressureValues { get; set; }
+        public ChartValues<MeasureModel> GeoXValues { get; set; }
+        public ChartValues<MeasureModel> GeoYValues { get; set; }
+        public ChartValues<MeasureModel> GeoZValues { get; set; }
+        public ChartValues<MeasureModel> AccXValues { get; set; }
+        public ChartValues<MeasureModel> AccYValues { get; set; }
+        public ChartValues<MeasureModel> AccZValues { get; set; }
+        public ChartValues<MeasureModel> Pm1sValues { get; set; }
+        public ChartValues<MeasureModel> Pm2sValues { get; set; }
+        public ChartValues<MeasureModel> Pm10sValues { get; set; }
+        public ChartValues<MeasureModel> Pm1aValues { get; set; }
+        public ChartValues<MeasureModel> Pm2aValues { get; set; }
+        public ChartValues<MeasureModel> Pm10aValues { get; set; }
+        public ChartValues<MeasureModel> HallaValues { get; set; }
+        //public Func<double, string> DateTimeFormatter { get; set; }
+/*        public double AxisStep { get; set; }
         public double AxisUnit { get; set; }
 
         public double AxisMax
@@ -86,7 +119,7 @@ namespace charts
                 _axisMin = value;
                 OnPropertyChanged("AxisMin");
             }
-        }
+        }*/
 
         public bool IsReading { get; set; }
 
@@ -106,24 +139,42 @@ namespace charts
                     Count = counter,
                     Value = _trend
                 });
+                canSatData.GetLastRecords(TemperatureValues, PressureValues, AccXValues, AccYValues, AccZValues,
+                                          GeoXValues, GeoYValues, GeoZValues, Pm1sValues, Pm2sValues, Pm10sValues,
+                                          Pm1aValues, Pm2aValues, Pm10aValues, HallaValues, counter);
                 counter++;
 
-                SetAxisLimits(now);
+                //SetAxisLimits(now);
 
                 //lets only use the last 50 values
                 if (ChartValues.Count >= 50)
                 {
                     ChartValues.Clear();
-                    counter= 1;
+                    TemperatureValues.Clear();
+                    PressureValues.Clear();
+                    AccXValues.Clear();
+                    AccYValues.Clear();
+                    AccZValues.Clear();
+                    GeoXValues.Clear();
+                    GeoYValues.Clear();
+                    GeoZValues.Clear();
+                    Pm1sValues.Clear();
+                    Pm2sValues.Clear();
+                    Pm10sValues.Clear();
+                    Pm1aValues.Clear();
+                    Pm2aValues.Clear();
+                    Pm10aValues.Clear();
+                    HallaValues.Clear();
+                    counter = 1;
                 }
             }
         }
 
-        private void SetAxisLimits(DateTime now)
+       /* private void SetAxisLimits(DateTime now)
         {
             AxisMax = now.Ticks + TimeSpan.FromSeconds(1).Ticks; // lets force the axis to be 1 second ahead
             AxisMin = now.Ticks - TimeSpan.FromSeconds(8).Ticks; // and 8 seconds behind
-        }
+        }*/
 
         private void InjectStopOnClick(object sender, RoutedEventArgs e)
         {
