@@ -6,6 +6,7 @@
 #include "I2Cdev.h"
 #include "MPU6050.h"
 #include <Seeed_HM330X.h>
+using namespace CanSatKit;
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
     #include "Wire.h"
@@ -17,7 +18,7 @@
     #define SERIAL_OUTPUT Serial
 #endif
 
-using namespace CanSatKit;
+
 
 class TransmitDataClass {
   private:
@@ -28,8 +29,7 @@ class TransmitDataClass {
     #define OUTPUT_READABLE_ACCELGYRO
     HM330X sensor;
   uint8_t buf[30];
-
-
+  double T, P;
   const char* str[7] = {"sensor num: ", "PM1.0 concentration(CF=1,Standard particulate matter,unit:ug/m3): ",
                      "PM2.5 concentration(CF=1,Standard particulate matter,unit:ug/m3): ",
                      "PM10 concentration(CF=1,Standard particulate matter,unit:ug/m3): ",
@@ -37,21 +37,44 @@ class TransmitDataClass {
                      "PM2.5 concentration(Atmospheric environment,unit:ug/m3): ",
                      "PM10 concentration(Atmospheric environment,unit:ug/m3): ",
                     };
+  static const int lengthHM330=6;
+  uint16_t HM330Value[lengthHM330];
+  bool stateBMP280, stateHM330, stateMPU6050, stateLM35, stateGPS, stateSE014;
+  int LM35 = A1;   //pin analogowy A1 połączony z sygnałem z czujnika
+  float VOLT;
+  float TEMP;
+  int SE014 = 5;
+  int Halla;
+  
+  Frame frame;
 
   public:
+    TransmitDataClass();
+    void initTransmitDataClass();
+    void getTransmitDataClass();
+    void printTransmitDataClass();
+    void transmitTransmitDataClass();
+    void printCSV();
     ///BMP SECTOR
     bool initBMP();
     void setBMP(int);
-    double getBMPPressure();
+    double getBMPData();
+    void printBMPValue();
+    ///MPU6050 SECTOR
     void setupMPU6050();
     bool initMPU6050();
-    void getMPU6050Value();
+    void getMPU6050Data();
     void printMPU6050Value();
+    ///HM330 SECTOR
     bool initHM330();
-    HM330XErrorCode print_result(const char* str, uint16_t value);
+    HM330XErrorCode print_result(const char* str, uint16_t value,int count);
     HM330XErrorCode parse_result(uint8_t* data);
     HM330XErrorCode parse_result_value(uint8_t* data);
+    void getHM330Data();
     void printHM330();
+    void setupSE014();
+    void getSE014Data();
+    void printSE014Value();
 };
 
 #endif
