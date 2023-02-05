@@ -66,29 +66,17 @@ void TransmitDataClass::transmitTransmitDataClass(){
       SerialUSB.print(";");
     }
   }
-  if(!stateHM330){
-    for(int i=1;i<=lengthHM330;i++){
-      //TODO wartości danych
-      frame.print(HM330Value[i]);
-      frame.print(";");
-      SerialUSB.print(HM330Value[i]);
-      SerialUSB.print(";");
-    }
-  }
-  else{
-    for(int i=1;i<=lengthHM330;i++){
-      //TODO wartości danych
-      frame.print("failed");
-      frame.print(";");
-      SerialUSB.print("failed");
-      SerialUSB.print(";");
-    }
+  for(int i=1;i<=lengthHM330;i++){
+    //TODO wartości danych
+    frame.print(HM330Value[i]);
+    frame.print(";");
+    SerialUSB.print(HM330Value[i]);
+    SerialUSB.print(";");
   }
   SerialUSB.print("ASDASDASDAd");
   SerialUSB.println(stateHM330);
 
   frame.print(Halla);
-  frame.print(";");
   radio.transmit(frame);
   frame.clear();
 }
