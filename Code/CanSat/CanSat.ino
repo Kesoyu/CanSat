@@ -13,5 +13,5 @@ void loop() {
   testObject.transmitTransmitDataClass();
   //testObject.printTransmitDataClass();
   SerialUSB.println("Witaj Świecie");
-  delay(2000);
+  delay(200);
 }
