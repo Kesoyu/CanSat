@@ -39,7 +39,6 @@ class TransmitDataClass {
                     };
   static const int lengthHM330=6;
   uint16_t HM330Value[lengthHM330];
-  bool stateBMP280, stateHM330, stateMPU6050, stateLM35, stateGPS, stateSE014;
   int LM35 = A1;   //pin analogowy A1 połączony z sygnałem z czujnika
   float VOLT;
   float TEMP;
@@ -49,6 +48,8 @@ class TransmitDataClass {
   Frame frame;
 
   public:
+    bool stateBMP280, stateMPU6050, stateLM35, stateGPS, stateSE014;
+    HM330XErrorCode stateHM330;
     TransmitDataClass();
     void initTransmitDataClass();
     void getTransmitDataClass();
@@ -66,7 +67,7 @@ class TransmitDataClass {
     void getMPU6050Data();
     void printMPU6050Value();
     ///HM330 SECTOR
-    bool initHM330();
+    HM330XErrorCode initHM330();
     HM330XErrorCode print_result(const char* str, uint16_t value,int count);
     HM330XErrorCode parse_result(uint8_t* data);
     HM330XErrorCode parse_result_value(uint8_t* data);

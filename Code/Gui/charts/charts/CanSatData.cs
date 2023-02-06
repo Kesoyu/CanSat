@@ -115,7 +115,7 @@ namespace charts
                 Delimiter = ";",
             };
 
-            var streamReader = File.OpenText("C:\\CanSat\\CanSat\\rec.txt");
+            var streamReader = File.OpenText("C:\\CanSat\\rec.txt");
             var csvReader = new CsvReader(streamReader, csvConfig);
 
 
@@ -139,13 +139,13 @@ namespace charts
             t.Add(new MeasureModel
             {
                 Count = cc,
-                Value = data[data.Count-1-helper].temp
+                Value = data[data.Count-1-helper].halla
                 //Value = data.Last().temp
             });
             p.Add(new MeasureModel
             {
                 Count = cc,
-                Value = data[data.Count - 1 - helper].pressure
+                Value = data[data.Count - 1 - helper].halla
                 //Value = data.Last().pressure
             });
             x.Add(new MeasureModel
@@ -196,7 +196,7 @@ namespace charts
                 Value = data[data.Count - 1 - helper].pm2s
                 //Value = data.Last().pm2s
             });
-            s2.Add(new MeasureModel
+            s10.Add(new MeasureModel
             {
                 Count = cc,
                 Value = data[data.Count - 1 - helper].pm10s
@@ -224,7 +224,7 @@ namespace charts
             h.Add(new MeasureModel
             {
                 Count = cc,
-                Value = data[data.Count - 1 - helper].halla
+                Value = 0
                 //Value = data.Last().halla
             });
         }

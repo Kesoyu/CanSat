@@ -8,7 +8,11 @@ Radio radio(Pins::Radio::ChipSelect,
             SpreadingFactor_9,
             CodingRate_4_8);
 TransmitDataClass::TransmitDataClass(){
-  stateBMP280 = stateHM330 = stateMPU6050 = stateGPS = stateLM35 = stateSE014 = false;
+  stateBMP280 = false;
+  stateMPU6050 = false;
+  stateGPS = false;
+  stateLM35 = false;
+  stateSE014 = false;
 }
 
 void TransmitDataClass::transmitTransmitDataClass(){
@@ -32,7 +36,7 @@ void TransmitDataClass::transmitTransmitDataClass(){
     SerialUSB.print("failed");
     SerialUSB.print(";");
   }
-  if(stateMPU6050){
+  if(stateMPU6050 == true){
     frame.print(ax);
     frame.print(";");
     frame.print(ay);
@@ -66,17 +70,28 @@ void TransmitDataClass::transmitTransmitDataClass(){
       SerialUSB.print(";");
     }
   }
-  for(int i=1;i<=lengthHM330;i++){
-    //TODO wartości danych
-    frame.print(HM330Value[i]);
-    frame.print(";");
-    SerialUSB.print(HM330Value[i]);
-    SerialUSB.print(";");
+  switch(stateHM330){
+    case NO_ERROR:
+      for(int i=1;i<=lengthHM330;i++){
+        //TODO wartości danych
+        frame.print(HM330Value[i]);
+        frame.print(";");
+        SerialUSB.print(HM330Value[i]);
+        SerialUSB.print(";");
+      } 
+      break;
+    case ERROR_PARAM:
+      for(int i=1;i<=lengthHM330;i++){
+        //TODO wartości danych
+        frame.print("failed");
+        frame.print(";");
+        SerialUSB.print("failed");
+        SerialUSB.print(";");
+      } 
+      break;
   }
-  SerialUSB.print("ASDASDASDAd");
-  SerialUSB.println(stateHM330);
-
-  frame.print(Halla);
+  SerialUSB.print(Halla);
+  frame.println(Halla);
   radio.transmit(frame);
   frame.clear();
 }
@@ -93,11 +108,22 @@ void TransmitDataClass::getTransmitDataClass(){
   if(stateBMP280){
     getBMPData();
   }
+  else{
+    stateBMP280 = initBMP();
+  }
   if(stateMPU6050){
     getMPU6050Data();
   }
-  if(!stateHM330){
-    getHM330Data();
+  else{
+    stateMPU6050 = initMPU6050();
+  }
+  switch(stateHM330){
+    case NO_ERROR:
+      getHM330Data();
+      break;
+    case ERROR_PARAM:
+       stateHM330 = initHM330();
+      break;
   }
   getSE014Data(); // default 0
 }
@@ -157,16 +183,16 @@ void TransmitDataClass::setupMPU6050() {
 
 bool TransmitDataClass::initMPU6050() {
   accelgyro.initialize();
-  if(!accelgyro.testConnection()) {
+  if(accelgyro.testConnection()) {
     // if connection failed - print message to the user
-    SerialUSB.println("MPU6050 connect failed");
-    return false;
-    // the program will be 'halted' here and nothing will happen till restart
-  } else {
-    // print message to the user if everything is OK
     SerialUSB.println("MPU6050 connect OK");
     setupMPU6050();
     return true;
+    // the program will be 'halted' here and nothing will happen till restart
+  } else {
+    // print message to the user if everything is OK
+    SerialUSB.println("MPU6050 connect failed");
+    return false;
   }
 }
 void TransmitDataClass::getMPU6050Data(){
@@ -184,18 +210,8 @@ void TransmitDataClass::printMPU6050Value(){
         SerialUSB.println(gz);
     #endif
 }
-bool TransmitDataClass::initHM330() {
-  if(sensor.init()) {
-    
-    // if connection failed - print message to the user
-    SerialUSB.println("HM330 connect OK");
-    return true;
-    // the program will be 'halted' here and nothing will happen till restart
-  } else {
-    // print message to the user if everything is OK
-    SerialUSB.println("HM330 connect failed");
-    return false;
-  }
+HM330XErrorCode TransmitDataClass::initHM330() {
+  return sensor.init();
 }
 HM330XErrorCode TransmitDataClass::print_result(const char* str, uint16_t value, int count) {
     if (NULL == str) {
