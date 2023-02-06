@@ -80,7 +80,7 @@ void TransmitDataClass::transmitTransmitDataClass(){
         SerialUSB.print(";");
       } 
       break;
-    case ERROR_PARAM:
+    default:
       for(int i=1;i<=lengthHM330;i++){
         //TODO wartości danych
         frame.print("failed");
@@ -121,7 +121,7 @@ void TransmitDataClass::getTransmitDataClass(){
     case NO_ERROR:
       getHM330Data();
       break;
-    case ERROR_PARAM:
+    default:
        stateHM330 = initHM330();
       break;
   }
