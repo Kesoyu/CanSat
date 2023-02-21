@@ -15,11 +15,17 @@ void setup() {
 void loop() {
   switch(state) {
   case wait:
-    SerialUSB.println(state);
+    testObject.getTransmitDataClass();
+    testObject.transmitTransmitDataClass();
+    //testObject.printTransmitDataClass();
     state = action;
+    delay(1000);
     break;
   case action:
-    SerialUSB.println(state);
+    testObject.getTransmitDataClass();
+    testObject.transmitTransmitDataClass();
+    //testObject.printTransmitDataClass();
+    delay(1000);
     state = recovery;
     break;
   case recovery:
@@ -27,10 +33,6 @@ void loop() {
     state = wait;
     break;
 }
-  testObject.getTransmitDataClass();
-  //SerialUSB.println(testObject.stateMPU6050);
-  testObject.transmitTransmitDataClass();
-  //testObject.printTransmitDataClass();
   SerialUSB.println("Witaj Świecie");
-  delay(2000);
+  delay(1000);
 }

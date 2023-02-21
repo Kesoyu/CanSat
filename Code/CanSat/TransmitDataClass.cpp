@@ -13,6 +13,7 @@ TransmitDataClass::TransmitDataClass(){
   stateGPS = false;
   stateLM35 = false;
   stateSE014 = false;
+  statePixy - false;
 }
 
 void TransmitDataClass::transmitTransmitDataClass(){
@@ -101,8 +102,11 @@ void TransmitDataClass::initTransmitDataClass(){
   stateBMP280 = initBMP();
   stateMPU6050 = initMPU6050();
   stateSE014 = true; //analogowe nie ma opcji sprawdzenia
+  statePixy = initPixy();
   setupSE014();
   stateHM330 = initHM330();
+  setupLM35();
+  setupGPS();
 }
 void TransmitDataClass::getTransmitDataClass(){
   if(stateBMP280){
@@ -125,13 +129,23 @@ void TransmitDataClass::getTransmitDataClass(){
        stateHM330 = initHM330();
       break;
   }
+  if(statePixy){
+    getPixyData();
+  }
+  else{
+    statePixy = initPixy();
+  }
   getSE014Data(); // default 0
+  getLM35Data();
+  getGPSData();
 }
 void TransmitDataClass::printTransmitDataClass(){
     printBMPValue();
     printMPU6050Value();
     printHM330();
     printSE014Value();
+    printPixyValue();
+    printLM35Value();
 }
 bool TransmitDataClass::initBMP() {
   if(!bmp.begin()) {
@@ -288,4 +302,47 @@ void TransmitDataClass::getSE014Data(){
 }
 void TransmitDataClass::printSE014Value(){
   SerialUSB.println(Halla);
+}
+bool TransmitDataClass::initPixy(){
+  if(pixy.init()==PIXY_RESULT_OK){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+void TransmitDataClass::getPixyData(){
+  pixy.ccc.getBlocks();
+}
+void TransmitDataClass::printPixyValue(){
+  SerialUSB.println(pixy.ccc.numBlocks);
+}
+float TransmitDataClass::lm35_raw_to_temperature(int raw) {
+  float voltage = raw * 5 / (std::pow(2, 12));
+  float assap = 100.0 * voltage;
+  return assap;
+}
+void TransmitDataClass::setupLM35(){
+  analogReadResolution(12);
+}
+void TransmitDataClass::getLM35Data(){
+  int raw = analogRead(lm35_pin);
+  temperature = lm35_raw_to_temperature(raw);
+}
+void TransmitDataClass::printLM35Value(){
+  SerialUSB.println(temperature);
+}
+void TransmitDataClass::setupGPS(){
+  Serial1.begin(9600);
+  SerialUSB.println("Software Serial GPS Test Echo Test");
+  Serial1.println(PMTK_SET_NMEA_OUTPUT_ALLDATA);
+  Serial1.println(PMTK_SET_NMEA_UPDATE_1HZ);
+  SerialUSB.println("Get version!");
+  Serial1.println(PMTK_Q_RELEASE);
+}
+void TransmitDataClass::getGPSData(){
+if (Serial1.available()) {
+    char c = Serial1.read();
+    SerialUSB.write(c);
+  }  
 }
