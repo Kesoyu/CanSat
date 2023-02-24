@@ -97,8 +97,6 @@ class TransmitDataClass {
     void setupLM35();
     void getLM35Data();
     void printLM35Value();
-    void setupGPS();
-    void getGPSData();
 };
 
 #endif

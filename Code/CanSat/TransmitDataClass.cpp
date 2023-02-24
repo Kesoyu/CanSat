@@ -102,11 +102,11 @@ void TransmitDataClass::initTransmitDataClass(){
   stateBMP280 = initBMP();
   stateMPU6050 = initMPU6050();
   stateSE014 = true; //analogowe nie ma opcji sprawdzenia
-  statePixy = initPixy();
+  //statePixy = initPixy();
   setupSE014();
   stateHM330 = initHM330();
   setupLM35();
-  setupGPS();
+  //setupGPS();
 }
 void TransmitDataClass::getTransmitDataClass(){
   if(stateBMP280){
@@ -129,22 +129,22 @@ void TransmitDataClass::getTransmitDataClass(){
        stateHM330 = initHM330();
       break;
   }
-  if(statePixy){
-    getPixyData();
-  }
-  else{
-    statePixy = initPixy();
-  }
+  // if(statePixy){
+  //   getPixyData();
+  // }
+  // else{
+  //   statePixy = initPixy();
+  // }
   getSE014Data(); // default 0
   getLM35Data();
-  getGPSData();
+  //getGPSData();
 }
 void TransmitDataClass::printTransmitDataClass(){
     printBMPValue();
     printMPU6050Value();
     printHM330();
     printSE014Value();
-    printPixyValue();
+    //printPixyValue();
     printLM35Value();
 }
 bool TransmitDataClass::initBMP() {
@@ -331,18 +331,4 @@ void TransmitDataClass::getLM35Data(){
 }
 void TransmitDataClass::printLM35Value(){
   SerialUSB.println(temperature);
-}
-void TransmitDataClass::setupGPS(){
-  Serial1.begin(9600);
-  SerialUSB.println("Software Serial GPS Test Echo Test");
-  Serial1.println(PMTK_SET_NMEA_OUTPUT_ALLDATA);
-  Serial1.println(PMTK_SET_NMEA_UPDATE_1HZ);
-  SerialUSB.println("Get version!");
-  Serial1.println(PMTK_Q_RELEASE);
-}
-void TransmitDataClass::getGPSData(){
-if (Serial1.available()) {
-    char c = Serial1.read();
-    SerialUSB.write(c);
-  }  
 }
