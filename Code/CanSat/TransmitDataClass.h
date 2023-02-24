@@ -57,9 +57,7 @@ class TransmitDataClass {
     Pixy2 pixy;
     float temperature;
     Frame frame;
-
-  const int lm35_pin = A0;
-
+    const int lm35_pin = A0;
   public:
     bool stateBMP280, stateMPU6050, stateLM35, stateGPS, stateSE014;
     HM330XErrorCode stateHM330;
