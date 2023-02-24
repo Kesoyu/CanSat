@@ -17,14 +17,14 @@ void loop() {
   case wait:
     testObject.getTransmitDataClass();
     testObject.transmitTransmitDataClass();
-    //testObject.printTransmitDataClass();
+    testObject.printTransmitDataClass();
     state = action;
     delay(1000);
     break;
   case action:
     testObject.getTransmitDataClass();
     testObject.transmitTransmitDataClass();
-    //testObject.printTransmitDataClass();
+    testObject.printTransmitDataClass();
     delay(1000);
     state = recovery;
     break;
