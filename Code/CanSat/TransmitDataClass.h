@@ -14,12 +14,6 @@ using namespace CanSatKit;
     #include "Wire.h"
 #endif
 
-#ifdef  ARDUINO_SAMD_VARIANT_COMPLIANCE
-    #define SERIAL_OUTPUT SerialUSB
-#else
-    #define SERIAL_OUTPUT Serial
-#endif
-
 #define OUTPUT_READABLE_ACCELGYRO
 
 class TransmitDataClass {

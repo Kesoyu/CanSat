@@ -153,7 +153,135 @@
     SerialUSB.print("Halla: ");
     SerialUSB.print(Halla);
     SerialUSB.println();
-    frame.println(Halla);
+    frame.print(Halla);
+    frame.print(";");
+    if(stateGPS){
+      frame.print(hour);
+      frame.print(";");
+      frame.print(minute);
+      frame.print(";");
+      frame.print(seconds);
+      frame.print(";");
+      frame.print(year);
+      frame.print(";");
+      frame.print(month);
+      frame.print(";");
+      frame.print(day);
+      frame.print(";");
+      frame.print(latitude);
+      frame.print(";");
+      frame.print(longitude);
+      frame.print(";");
+      frame.print(lat);
+      frame.print(";");
+      frame.print(lon);
+      frame.print(";");
+      frame.print(altitude);
+      frame.print(";");
+      frame.println(antenna);
+
+
+      SerialUSB.print("hour: ");
+      SerialUSB.print(hour);
+      SerialUSB.print(";");
+      SerialUSB.print("minute: ");
+      SerialUSB.print(minute);
+      SerialUSB.print(";");
+      SerialUSB.print("seconds: ");
+      SerialUSB.print(seconds);
+      SerialUSB.print(";");
+      SerialUSB.print("year: ");
+      SerialUSB.print(year);
+      SerialUSB.print(";");
+      SerialUSB.print("month: ");
+      SerialUSB.print(month);
+      SerialUSB.print(";");
+      SerialUSB.print("day: ");
+      SerialUSB.print(day);
+      SerialUSB.print(";");
+      SerialUSB.print("latitude: ");
+      SerialUSB.print(latitude);
+      SerialUSB.print(";");
+      SerialUSB.print("longitude: ");
+      SerialUSB.print(longitude);
+      SerialUSB.print(";");
+      SerialUSB.print("lat: ");
+      SerialUSB.print(lat);
+      SerialUSB.print(";");
+      SerialUSB.print("lon: ");
+      SerialUSB.print(lon);
+      SerialUSB.print(";");
+      SerialUSB.print("altitude: ");
+      SerialUSB.print(altitude);
+      SerialUSB.print(";");
+      SerialUSB.print("antenna: ");
+      SerialUSB.print(antenna);
+      SerialUSB.println(";");
+    }
+    else{
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.println("failed");
+
+
+      SerialUSB.print("hour: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("minute: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("seconds: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("year: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("month: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("day: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("latitude: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("longitude: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("lat: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("lon: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("altitude: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("antenna: ");
+      SerialUSB.print("failed");
+      SerialUSB.println(";");
+    }
+    
     radio.transmit(frame);
     frame.clear();
   }
@@ -521,7 +649,7 @@
 
   void TransmitDataClass::getHM330Data(){
     if (sensor.read_sensor_value(buf, 29)) {
-      SERIAL_OUTPUT.println("HM330X read result failed!!");
+      SerialUSB.println("HM330X read result failed!!");
     }
     if(parse_result_value(buf)==ERROR_PARAM){
       for(int i=0;i<lengthHM330;i++){
@@ -533,7 +661,7 @@
         HM330Value[i]=0;
       }
     }
-      //SERIAL_OUTPUT.println("");
+      //SerialUSB.println("");
   }
 //End HM330
 
@@ -621,5 +749,6 @@
     altitude = wysokosc;
     satellites = satelity;
     antenna = anteny;
+    stateGPS = true;
   }
 //End GPS
