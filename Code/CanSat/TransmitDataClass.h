@@ -32,6 +32,14 @@ class TransmitDataClass {
     gy,                     ///< Gyroscope y axis value
     gz;                     ///< Gyroscope z axis value
     
+    float AccX, AccY, AccZ;
+    float GyroX, GyroY, GyroZ;
+    float accAngleX, accAngleY, gyroAngleX, gyroAngleY, gyroAngleZ;
+    float roll, pitch, yaw;
+    float AccErrorX, AccErrorY, GyroErrorX, GyroErrorY, GyroErrorZ;
+    float elapsedTime, currentTime, previousTime;
+    int c = 0;
+
       
     BMP280 bmp;         ///< Instance of the BMP280 module
     double T            ///< Contains a BMP35 atmospheric pressure value
@@ -55,7 +63,7 @@ class TransmitDataClass {
     
     int Halla;              ///< Detecting increased of magnetic field 0:1 values
     Pixy2 pixy;             ///< Pixy UART connection
-    float temperature;      ///< Temperature value
+    float temperature;      ///< Temperature LM35 value
     Frame frame;            ///< Frame for transmit
     
 
@@ -98,12 +106,13 @@ class TransmitDataClass {
     ///Region BMP280
       bool initBMP();         ///< Initalize BMP280 module
       void setBMP(int);       ///< Setup BMP280 module
-      double getBMPData();    ///< Get BMP280 Data
+      void getBMPData();      ///< Get BMP280 Data
       void printBMPValue();   ///< Print BMP280 Value
     ///End BMP280
 
     ///Region MPU6050
       bool initMPU6050();         ///< Initalize MPU6050 module
+      void calcMPU6050Error();
       void setupMPU6050();        ///< Setup MPU6050 module
       void getMPU6050Data();      ///< Get and validate MPU6050 Data
       void printMPU6050Value();   ///< Print MPU6050 Value
