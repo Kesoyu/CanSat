@@ -25,7 +25,67 @@
   void TransmitDataClass::transmitTransmitDataClass(){
     File sdRequiredData;
     if(stateSD){
-      sdRequiredData = SD.open("data.csv", FILE_WRITE);
+      if(!SD.exists("data.csv")){
+        sdRequiredData = SD.open("data.csv", FILE_WRITE);
+        sdRequiredData.print("Temperature BMP280");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Atmospheric pressure BMP280");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Temperature LM35");
+        sdRequiredData.print(";");
+        sdRequiredData.print("AccX");
+        sdRequiredData.print(";");
+        sdRequiredData.print("AccY");
+        sdRequiredData.print(";");
+        sdRequiredData.print("AccZ");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Yaw");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Roll");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Pitch");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM1.0 standard particulate");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM2.5 standard particulate");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM10 standard particulate");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM1.0 Atmospheric environment");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM2.5 Atmospheric environment");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM10 Atmospheric environment");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Halla");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Hour");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Minute");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Seconds");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Year");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Month");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Day");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Latitude");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Longitude");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Lat");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Lon");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Altitude");
+        sdRequiredData.print(";");
+        sdRequiredData.println("Antenna");
+      }
+      else{
+        sdRequiredData = SD.open("data.csv", FILE_WRITE);
+      }
     }
     if(stateBMP280){
       frame.print(T);
