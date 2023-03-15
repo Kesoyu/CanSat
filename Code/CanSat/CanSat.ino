@@ -28,6 +28,7 @@ void setup() {
 
   
   GPSSerial.println(PMTK_Q_RELEASE); // Ask for firmware version
+  SerialUSB.println("Setup");
 }
 
 uint32_t timer = millis();
