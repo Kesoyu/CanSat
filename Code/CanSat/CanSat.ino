@@ -56,6 +56,7 @@ void loop() {
         if(testObject.firstPressure-testObject.P>30){
           state = action;
         }
+        state = action;
         testObject.transmitTransmitDataClass();
         delay(30000);
         break;

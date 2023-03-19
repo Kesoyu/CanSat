@@ -52,7 +52,7 @@
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
                                 Stroke="Crimson"
-                                Title="Celsius(°C)"
+                                Title="Celsius"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
             </lvc:CartesianChart.Series>
@@ -128,25 +128,25 @@
         </lvc:CartesianChart>
         <lvc:CartesianChart Grid.Row="2" Grid.Column="1" LegendLocation="Right" Foreground="Wheat" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Series>
-                <lvc:LineSeries Values="{Binding GeoXValues}" 
+                <lvc:LineSeries Values="{Binding YawValues}" 
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
                                 Stroke="Red"
-                                Title="Gyroscope X"
+                                Title="Yaw"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
-                <lvc:LineSeries Values="{Binding GeoYValues}" 
+                <lvc:LineSeries Values="{Binding RollValues}" 
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
                                 Stroke="Green"
-                                Title="Gyroscope Y"
+                                Title="Roll"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
-                <lvc:LineSeries Values="{Binding GeoZValues}" 
+                <lvc:LineSeries Values="{Binding PitchValues}" 
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
                                 Stroke="Blue"
-                                Title="Gyroscope Z"
+                                Title="Pitch"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
             </lvc:CartesianChart.Series>

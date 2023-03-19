@@ -86,6 +86,7 @@
         sdRequiredData.print("Altitude");
         sdRequiredData.print(";");
         sdRequiredData.print("Antenna");
+        sdRequiredData.print(";");
         sdRequiredData.print("Count");
         sdRequiredData.print(";");
         sdRequiredData.print("Blue");
@@ -324,6 +325,7 @@
       frame.print(altitude);
       frame.print(";");
       frame.print(antenna);
+      frame.print(";");
 
 
       SerialUSB.print("hour: ");
@@ -386,6 +388,7 @@
         sdRequiredData.print(altitude);
         sdRequiredData.print(";");
         sdRequiredData.print(antenna);
+        sdRequiredData.print(";");
       }
     }
     else{
@@ -412,6 +415,7 @@
       frame.print("failed");
       frame.print(";");
       frame.print("failed");
+      frame.print(";");
 
 
       SerialUSB.print("hour: ");
@@ -474,6 +478,7 @@
         sdRequiredData.print("failed");
         sdRequiredData.print(";");
         sdRequiredData.print("failed");
+        sdRequiredData.print(";");
       }
     }
     if(statePixy){
@@ -486,7 +491,6 @@
       frame.print(green);
       frame.print(";");
       frame.print(other);
-      frame.println(";");
 
       SerialUSB.print("Count: ");
       SerialUSB.print(numberOfBlocks);
@@ -512,8 +516,7 @@
         sdRequiredData.print(";");
         sdRequiredData.print(green);
         sdRequiredData.print(";");
-        sdRequiredData.print(other);
-        sdRequiredData.println(";");
+        sdRequiredData.println(other);
       }
     }
     else{
@@ -526,7 +529,6 @@
       frame.print("failed");
       frame.print(";");
       frame.print("failed");
-      frame.println(";");
 
       SerialUSB.print("Count: ");
       SerialUSB.print("failed");
@@ -552,8 +554,7 @@
         sdRequiredData.print(";");
         sdRequiredData.print("failed");
         sdRequiredData.print(";");
-        sdRequiredData.print("failed");
-        sdRequiredData.println(";");
+        sdRequiredData.println("failed");
       }
     }
     radio.transmit(frame);

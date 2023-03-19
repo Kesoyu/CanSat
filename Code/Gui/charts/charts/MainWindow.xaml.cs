@@ -51,9 +51,9 @@ namespace charts
             ChartValues = new ChartValues<MeasureModel>();
             TemperatureValues = new ChartValues<MeasureModel>();
             PressureValues = new ChartValues<MeasureModel>();
-            GeoXValues = new ChartValues<MeasureModel>();
-            GeoYValues = new ChartValues<MeasureModel>();
-            GeoZValues = new ChartValues<MeasureModel>();
+            YawValues = new ChartValues<MeasureModel>();
+            RollValues = new ChartValues<MeasureModel>();
+            PitchValues = new ChartValues<MeasureModel>();
             AccXValues = new ChartValues<MeasureModel>();
             AccYValues = new ChartValues<MeasureModel>();
             AccZValues = new ChartValues<MeasureModel>();
@@ -85,12 +85,12 @@ namespace charts
         public ChartValues<MeasureModel> ChartValues { get; set; }
         public ChartValues<MeasureModel> TemperatureValues { get; set; }
         public ChartValues<MeasureModel> PressureValues { get; set; }
-        public ChartValues<MeasureModel> GeoXValues { get; set; }
-        public ChartValues<MeasureModel> GeoYValues { get; set; }
-        public ChartValues<MeasureModel> GeoZValues { get; set; }
         public ChartValues<MeasureModel> AccXValues { get; set; }
         public ChartValues<MeasureModel> AccYValues { get; set; }
         public ChartValues<MeasureModel> AccZValues { get; set; }
+        public ChartValues<MeasureModel> YawValues { get; set; }
+        public ChartValues<MeasureModel> RollValues { get; set; }
+        public ChartValues<MeasureModel> PitchValues { get; set; }
         public ChartValues<MeasureModel> Pm1sValues { get; set; }
         public ChartValues<MeasureModel> Pm2sValues { get; set; }
         public ChartValues<MeasureModel> Pm10sValues { get; set; }
@@ -140,7 +140,7 @@ namespace charts
                     Value = _trend
                 });
                 canSatData.GetLastRecords(TemperatureValues, PressureValues, AccXValues, AccYValues, AccZValues,
-                                          GeoXValues, GeoYValues, GeoZValues, Pm1sValues, Pm2sValues, Pm10sValues,
+                                          YawValues, RollValues, PitchValues, Pm1sValues, Pm2sValues, Pm10sValues,
                                           Pm1aValues, Pm2aValues, Pm10aValues, HallaValues, counter);
                 counter++;
 
@@ -155,9 +155,9 @@ namespace charts
                     AccXValues.Clear();
                     AccYValues.Clear();
                     AccZValues.Clear();
-                    GeoXValues.Clear();
-                    GeoYValues.Clear();
-                    GeoZValues.Clear();
+                    YawValues.Clear();
+                    RollValues.Clear();
+                    PitchValues.Clear();
                     Pm1sValues.Clear();
                     Pm2sValues.Clear();
                     Pm10sValues.Clear();
