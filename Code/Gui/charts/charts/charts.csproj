@@ -86,8 +86,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="PressureModel.cs" />
-    <Compile Include="TemperatureModel.cs" />
+    <Compile Include="ObservableObject.cs" />
+    <Compile Include="StringModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

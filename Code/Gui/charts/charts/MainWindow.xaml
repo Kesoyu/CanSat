@@ -18,9 +18,42 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="0" Click="InjectStopOnClick">
-            Inject/Stop Data
-        </Button>
+        
+        
+        <Grid Grid.Row="0" Height="auto" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Button x:Name="mainButton" Click="InjectStopOnClick" Content="Inject Data"/>
+                <TextBlock x:Name="Time" Text="Time: " Background="White" Foreground="Black" Grid.Column="1"/>
+                <TextBlock x:Name="Date" Text="Date: " Background="White" Foreground="Black" Grid.Column="1"/>
+                <TextBlock x:Name="Latitude" Text="Lat: " Background="White" Foreground="Black" Grid.Column="1"/>
+                <TextBlock x:Name="Longitude" Text="Lon: " Background="White" Foreground="Black" Grid.Column="1"/>
+            </StackPanel>
+            <Grid Grid.Column="1" Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="Count" Grid.ColumnSpan="2" Height="auto" Text="Count: "/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock x:Name="Blue" Text="Blue: "/>
+                        <TextBlock x:Name="Yellow" Text="Yellow: "/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1">
+                        <TextBlock x:Name="Green" Text="Green: "/>
+                        <TextBlock x:Name="Other" Text="Other: "/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
         <!--Here we disable tooltips and hovering to get a better performance-->
         <lvc:CartesianChart Grid.Row="1" LegendLocation="Right" Foreground="Wheat" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Series>

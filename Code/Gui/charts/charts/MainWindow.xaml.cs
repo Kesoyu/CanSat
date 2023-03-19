@@ -3,6 +3,7 @@ using LiveCharts.Configurations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -42,6 +43,7 @@ namespace charts
                .Y(model => model.Value);           //use the value property as Y
 
             //lets save the mapper globally.
+
             Charting.For<MeasureModel>(mapper);
 
             hPa.LabelFormatter = val => val + " hPa";
@@ -64,6 +66,7 @@ namespace charts
             Pm2aValues = new ChartValues<MeasureModel>();
             Pm10aValues = new ChartValues<MeasureModel>();
             HallaValues = new ChartValues<MeasureModel>();
+            Wartosc = "TEST";
 
             //lets set how to display the X Labels
             //DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
@@ -98,28 +101,41 @@ namespace charts
         public ChartValues<MeasureModel> Pm2aValues { get; set; }
         public ChartValues<MeasureModel> Pm10aValues { get; set; }
         public ChartValues<MeasureModel> HallaValues { get; set; }
-        //public Func<double, string> DateTimeFormatter { get; set; }
-/*        public double AxisStep { get; set; }
-        public double AxisUnit { get; set; }
 
-        public double AxisMax
-        {
-            get { return _axisMax; }
+
+        private string _value;
+        public string Wartosc{
+            get{
+                return _value;
+            }
             set
             {
-                _axisMax = value;
-                OnPropertyChanged("AxisMax");
+                _value = value;
+                OnPropertyChanged("Wartosc");
             }
         }
-        public double AxisMin
-        {
-            get { return _axisMin; }
-            set
-            {
-                _axisMin = value;
-                OnPropertyChanged("AxisMin");
-            }
-        }*/
+/*        //public Func<double, string> DateTimeFormatter { get; set; }
+        *//*        public double AxisStep { get; set; }
+                public double AxisUnit { get; set; }
+
+                public double AxisMax
+                {
+                    get { return _axisMax; }
+                    set
+                    {
+                        _axisMax = value;
+                        OnPropertyChanged("AxisMax");
+                    }
+                }
+                public double AxisMin
+                {
+                    get { return _axisMin; }
+                    set
+                    {
+                        _axisMin = value;
+                        OnPropertyChanged("AxisMin");
+                    }
+                }*/
 
         public bool IsReading { get; set; }
 
@@ -129,6 +145,16 @@ namespace charts
 
             while (IsReading)
             {
+                string Time = string.Empty;
+                string Date = string.Empty;
+                string Lat = string.Empty;
+                string Lon = string.Empty;
+                string Count = string.Empty;
+                string Blue = string.Empty;
+                string Yellow = string.Empty;
+                string Green = string.Empty;
+                string Other = string.Empty;
+
                 Thread.Sleep(1000);
                 var now = DateTime.Now;
 
@@ -141,9 +167,11 @@ namespace charts
                 });
                 canSatData.GetLastRecords(TemperatureValues, PressureValues, AccXValues, AccYValues, AccZValues,
                                           YawValues, RollValues, PitchValues, Pm1sValues, Pm2sValues, Pm10sValues,
-                                          Pm1aValues, Pm2aValues, Pm10aValues, HallaValues, counter);
+                                          Pm1aValues, Pm2aValues, Pm10aValues, HallaValues, counter, out Time, out Date, out Lat, out Lon,
+                                          out Count, out Blue, out Yellow, out Green, out Other);
                 counter++;
-
+                SetGPS(Time, Date, Lat, Lon);
+                SetPixy(Count, Blue, Yellow, Green, Other);
                 //SetAxisLimits(now);
 
                 //lets only use the last 50 values
@@ -169,12 +197,31 @@ namespace charts
                 }
             }
         }
-
-       /* private void SetAxisLimits(DateTime now)
+        private void SetPixy(string count, string blue, string yellow, string green, string other)
         {
-            AxisMax = now.Ticks + TimeSpan.FromSeconds(1).Ticks; // lets force the axis to be 1 second ahead
-            AxisMin = now.Ticks - TimeSpan.FromSeconds(8).Ticks; // and 8 seconds behind
-        }*/
+            Dispatcher.Invoke(new Action(() => {
+                Count.Text = "Count: " + count;
+                Blue.Text = "Blue: " + blue + "%";
+                Yellow.Text = "Yellow: " + yellow + "%";
+                Green.Text = "Green: " + green + "%";
+                Other.Text = "Other: " + other + "%";
+            }));
+        }
+        private void SetGPS(string time,string date, string lat, string lon)
+        {
+            Dispatcher.Invoke(new Action(() => {
+                Time.Text = "Time: "+time;
+                Date.Text = "Date: "+date;
+                Latitude.Text = "Latitude: " + lat;
+                Longitude.Text = "Longitude: " + lon;
+            }));
+        }
+
+        /* private void SetAxisLimits(DateTime now)
+         {
+             AxisMax = now.Ticks + TimeSpan.FromSeconds(1).Ticks; // lets force the axis to be 1 second ahead
+             AxisMin = now.Ticks - TimeSpan.FromSeconds(8).Ticks; // and 8 seconds behind
+         }*/
 
         private void InjectStopOnClick(object sender, RoutedEventArgs e)
         {

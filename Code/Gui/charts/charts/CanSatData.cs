@@ -163,11 +163,11 @@ namespace charts
                 }
                 if (!char.TryParse(lat, out Lat))
                 {
-                    Lat = '-';
+                    Lat = 'X';
                 }
                 if (!char.TryParse(lon, out Lon))
                 {
-                    Lon = '-';
+                    Lon = 'X';
                 }
                 if (!double.TryParse(altitude, out Altitude))
                 {
@@ -181,19 +181,19 @@ namespace charts
                 {
                     Count = 0;
                 }
-                if (!double.TryParse(blue, out Blue))
+                if (!double.TryParse(blue.Replace('.', ','), out Blue))
                 {
                     Blue = 0;
                 }
-                if (!double.TryParse(yellow, out Yellow))
+                if (!double.TryParse(yellow.Replace('.', ','), out Yellow))
                 {
                     Yellow = 0;
                 }
-                if (!double.TryParse(green, out Green))
+                if (!double.TryParse(green.Replace('.', ','), out Green))
                 {
                     Green = 0;
                 }
-                if (!double.TryParse(other, out Other))
+                if (!double.TryParse(other.Replace('.', ','), out Other))
                 {
                     Other = 0;
                 }
@@ -234,7 +234,8 @@ namespace charts
                                    ChartValues<MeasureModel> roll, ChartValues<MeasureModel> pitch, ChartValues<MeasureModel> s1,
                                    ChartValues<MeasureModel> s2, ChartValues<MeasureModel> s10, ChartValues<MeasureModel> a1,
                                    ChartValues<MeasureModel> a2, ChartValues<MeasureModel> a10, ChartValues<MeasureModel> h,
-                                   double cc)
+                                   double cc, out string time, out string date, out string lat, out string lon,
+                                   out string count, out string blue, out string yellow, out string green, out string other)
         {
             ReadCSVData();
             int helper;
@@ -331,6 +332,15 @@ namespace charts
                 Value = data[data.Count - 1 - helper].Halla
                 //Value = data.Last().halla
             });
+            time = data[data.Count - 1 - helper].Hour.ToString() + ":" + data[data.Count - 1 - helper].Minute.ToString() + ":" + data[data.Count - 1 - helper].Seconds;
+            date = data[data.Count - 1 - helper].Day.ToString() + "." + data[data.Count - 1 - helper].Month.ToString() + "." + data[data.Count - 1 - helper].Year;
+            lat = data[data.Count - 1 - helper].Latitude.ToString() + data[data.Count - 1 - helper].Lat.ToString();
+            lon = data[data.Count - 1 - helper].Longitude.ToString() + data[data.Count - 1 - helper].Lon.ToString();
+            count = data[data.Count - 1 - helper].Count.ToString();
+            blue = data[data.Count - 1 - helper].Blue.ToString();
+            yellow = data[data.Count - 1 - helper].Yellow.ToString();
+            green = data[data.Count - 1 - helper].Green.ToString();
+            other = data[data.Count - 1 - helper].Other.ToString();
         }
     }
 }
