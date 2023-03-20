@@ -214,7 +214,7 @@ namespace charts
                 Delimiter = ";",
             };
 
-            var streamReader = File.OpenText("C:\\CanSat\\CanSat\\DATA.txt");
+            var streamReader = File.OpenText("C:\\CanSat\\DATA.txt");
             var csvReader = new CsvReader(streamReader, csvConfig);
 
 
