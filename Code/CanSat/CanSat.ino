@@ -13,7 +13,7 @@ TransmitDataClass testObject;
 
 Adafruit_GPS GPS(&GPSSerial);
 
-#define GPSECHO false
+#define GPSECHO true
 
 void setup() {
   delay(1000);
@@ -32,6 +32,11 @@ void setup() {
 }
 
 uint32_t timer = millis();
+uint32_t timerWait = millis();
+uint32_t timerAction = millis();
+uint32_t timerRecovery = millis();
+
+int counterMissons = 0;
 int counter = 0;
 
 void loop() {
@@ -44,33 +49,35 @@ void loop() {
     if (!GPS.parse(GPS.lastNMEA()))
       return;
   }
-  if (millis() - timer > 1000) {
+  if (millis() - timer > 5000) {
     timer = millis(); // reset the timer
     if (GPS.fix) {
-      testObject.setGPSData(GPS.hour, GPS.minute, GPS.seconds, GPS.milliseconds, GPS.year, GPS.month, GPS.day, GPS.fix, GPS.fixquality, GPS.latitude, GPS.longitude, GPS.lat, GPS.lon, GPS.speed, GPS.angle, GPS.altitude, GPS.satellites, GPS.antenna);
+      testObject.setGPSData(GPS.hour, GPS.minute, GPS.seconds, GPS.milliseconds, GPS.year, GPS.month, GPS.day, GPS.fix, GPS.fixquality, GPS.latitude, GPS.longitude, GPS.lat, GPS.lon, GPS.speed, GPS.angle, GPS.altitude, GPS.satellites, GPS.antenna);   
     }
-    switch(state) {
-      case wait:
-        testObject.getOnlyMPU6050Data();
-        testObject.getOnlyBMPData();
-        if(testObject.firstPressure-testObject.P>30){
-          state = action;
-        }
+    if(state==wait && millis() - timerWait > 5000) {
+      timerWait = millis();
+      if(counter==0){
+        testObject.getOnlyHM330Data();
+      }
+      testObject.getOnlyBMPData();
+      if(testObject.firstPressure-testObject.P>20){
         state = action;
-        testObject.transmitTransmitDataClass();
-        delay(5000);
-        break;
-      case action:
-        counter++;
-        testObject.getTransmitDataClass();
-        testObject.transmitTransmitDataClass();
-        if(counter==900)
-          state = recovery;
-        break;
-      case recovery:
-        testObject.transmitTransmitDataClass();
-        delay(30000);
-        break;
+      }
+      testObject.transmitTransmitDataClass();
+      state = action;
+    }
+    if(state==action){
+      counterMissons++;
+      testObject.getTransmitDataClass();
+      testObject.transmitTransmitDataClass();
+      if(counterMissons>=900){
+        state = recovery;
+      } 
+    }
+    if(state==recovery && millis() - timerRecovery > 5000){
+      timerRecovery = millis();
+      testObject.transmitTransmitDataClass();
     }
   }
+  counter++;
 }

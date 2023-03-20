@@ -571,7 +571,7 @@
     stateBMP280 = initBMP();
     stateMPU6050 = initMPU6050();
     stateSE014 = true;
-    statePixy = initPixy();
+    //statePixy = initPixy();
     setupSE014();
     stateHM330 = initHM330();
     setupLM35();
@@ -605,12 +605,12 @@
         stateHM330 = initHM330();
         break;
     }
-    if(statePixy){
-      getPixyData();
-    }
-    else{
-      statePixy = initPixy();
-    }
+    // if(statePixy){
+    //   getPixyData();
+    // }
+    // else{
+    //   statePixy = initPixy();
+    // }
     getSE014Data(); // default 0
     getLM35Data();
     index++;    
@@ -694,17 +694,6 @@
           Fastwire::setup(400, true);
       #endif
 
-  }
-
-  void TransmitDataClass::getOnlyMPU6050Data(){
-    switch(stateHM330){
-      case NO_ERROR:
-        getHM330Data();
-        break;
-      default:
-        stateHM330 = initHM330();
-        break;
-    }
   }
 
   bool TransmitDataClass::initMPU6050() {
@@ -969,6 +958,18 @@
     }
       //SerialUSB.println("");
   }
+  
+  void TransmitDataClass::getOnlyHM330Data(){
+    switch(stateHM330){
+      case NO_ERROR:
+        getHM330Data();
+        break;
+      default:
+        stateHM330 = initHM330();
+        break;
+    }
+  }
+  
 //End HM330
 
 //Region SE014 ///Czujnik Halla wzrostowy
