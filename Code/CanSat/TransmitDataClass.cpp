@@ -293,7 +293,7 @@
     stateBMP280 = initBMP();
     stateMPU6050 = initMPU6050();
     stateSE014 = true;
-    //statePixy = initPixy();
+    //statePixy = initPixy(); 
     setupSE014();
     stateHM330 = initHM330();
     setupLM35();
@@ -323,12 +323,12 @@
         stateHM330 = initHM330();
         break;
     }
-    // if(statePixy){
-    //   getPixyData();
-    // }
-    // else{
-    //   statePixy = initPixy();
-    // }
+    if(statePixy){
+      getPixyData();
+    }
+    else{
+      statePixy = initPixy();
+    }
     getSE014Data(); // default 0
     getLM35Data();
   }
@@ -340,7 +340,7 @@
       printMPU6050Value();
       printHM330();
       printSE014Value();
-      //printPixyValue();
+      printPixyValue();
       printLM35Value();
   }
 //End PrintData
@@ -696,7 +696,7 @@
 
 //Region LM35 //Termometr analogowy
   float TransmitDataClass::lm35_raw_to_temperature(int raw) {
-    float voltage = raw * 5 / (std::pow(2, 12));
+    float voltage = raw * 3.3 / (std::pow(2, 12));
     float assap = 100.0 * voltage;
     return assap;
   }

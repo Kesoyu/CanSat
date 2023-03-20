@@ -31,5 +31,8 @@ void loop() {
   // get and print signal level (rssi)
 
   // print received message
+  SerialUSB.println("xcgfcvh");
   SerialUSB.println(data);
+  
+
 }
