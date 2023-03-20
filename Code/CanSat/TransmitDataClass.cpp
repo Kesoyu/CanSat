@@ -17,11 +17,97 @@
     stateLM35 = false;
     stateSE014 = false;
     statePixy = false;
+    stateSD = false;
+    index = 0;
+    indexBMP = 0;
   }
 //End Constructor
 
 //Region Transmit
   void TransmitDataClass::transmitTransmitDataClass(){
+    File sdRequiredData;
+    if(stateSD){
+      if(!SD.exists("data.csv")){
+        sdRequiredData = SD.open("data.csv", FILE_WRITE);
+        sdRequiredData.print("Index");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Temperature BMP280");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Atmospheric pressure BMP280");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Temperature LM35");
+        sdRequiredData.print(";");
+        sdRequiredData.print("AccX");
+        sdRequiredData.print(";");
+        sdRequiredData.print("AccY");
+        sdRequiredData.print(";");
+        sdRequiredData.print("AccZ");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Yaw");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Roll");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Pitch");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM1.0 standard particulate");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM2.5 standard particulate");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM10 standard particulate");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM1.0 Atmospheric environment");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM2.5 Atmospheric environment");
+        sdRequiredData.print(";");
+        sdRequiredData.print("PM10 Atmospheric environment");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Halla");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Hour");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Minute");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Seconds");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Year");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Month");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Day");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Latitude");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Longitude");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Lat");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Lon");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Altitude");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Antenna");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Count");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Blue");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Yellow");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Green");
+        sdRequiredData.print(";");
+        sdRequiredData.print("Other");
+        sdRequiredData.println(";");
+      }
+      else{
+        sdRequiredData = SD.open("data.csv", FILE_WRITE);
+      }
+    }
+    frame.print(index);
+    frame.print(";");
+    if(stateSD){
+      sdRequiredData.print(index);
+      sdRequiredData.print(";");
+    }
     if(stateBMP280){
       frame.print(T);
       frame.print(";");
@@ -33,6 +119,12 @@
       SerialUSB.print("hPa: ");
       SerialUSB.print(P);
       SerialUSB.print(";");
+      if(stateSD){
+        sdRequiredData.print(T);
+        sdRequiredData.print(";");
+        sdRequiredData.print(P);
+        sdRequiredData.print(";");
+      }
     }
     else{
       frame.print("failed");
@@ -45,6 +137,12 @@
       SerialUSB.print("hPa: ");
       SerialUSB.print("failed");
       SerialUSB.print(";");
+      if(stateSD){
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+      }
     }
     SerialUSB.println();
     if(stateLM35){
@@ -53,6 +151,10 @@
       SerialUSB.print("Temp: ");
       SerialUSB.print(temperature);
       SerialUSB.print(";");
+      if(stateSD){
+        sdRequiredData.print(temperature);
+        sdRequiredData.print(";");
+      }
     }
     else{
       frame.print("failed");
@@ -60,6 +162,10 @@
       SerialUSB.print("Temp: ");
       SerialUSB.print("failed");
       SerialUSB.print(";");
+      if(stateSD){
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+      }
     }
     SerialUSB.println();
     if(stateMPU6050 == true){
@@ -94,6 +200,20 @@
       SerialUSB.print("pitch: ");
       SerialUSB.print(pitch);
       SerialUSB.print(";");
+      if(stateSD){
+        sdRequiredData.print(AccX);
+        sdRequiredData.print(";");
+        sdRequiredData.print(AccY);
+        sdRequiredData.print(";");
+        sdRequiredData.print(AccZ);
+        sdRequiredData.print(";");
+        sdRequiredData.print(yaw);
+        sdRequiredData.print(";");
+        sdRequiredData.print(roll);
+        sdRequiredData.print(";");
+        sdRequiredData.print(pitch);
+        sdRequiredData.print(";");
+      }
     }
     else{
       frame.print("failed");
@@ -127,6 +247,20 @@
       SerialUSB.print("pitch: ");
       SerialUSB.print("failed");
       SerialUSB.print(";");
+      if(stateSD){
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+      }
     }
     SerialUSB.println();
     switch(stateHM330){
@@ -137,6 +271,10 @@
           frame.print(";");
           SerialUSB.print(HM330Value[i]);
           SerialUSB.print(";");
+          if(stateSD){
+            sdRequiredData.print(HM330Value[i]);
+            sdRequiredData.print(";");
+          }
         } 
         break;
       default:
@@ -146,6 +284,10 @@
           frame.print(";");
           SerialUSB.print("failed");
           SerialUSB.print(";");
+          if(stateSD){
+            sdRequiredData.print("failed");
+            sdRequiredData.print(";");
+          }
         } 
         break;
     }
@@ -155,6 +297,10 @@
     SerialUSB.println();
     frame.print(Halla);
     frame.print(";");
+    if(stateSD){
+      sdRequiredData.print(Halla);
+      sdRequiredData.print(";");
+    }
     if(stateGPS){
       frame.print(hour);
       frame.print(";");
@@ -178,7 +324,8 @@
       frame.print(";");
       frame.print(altitude);
       frame.print(";");
-      frame.println(antenna);
+      frame.print(antenna);
+      frame.print(";");
 
 
       SerialUSB.print("hour: ");
@@ -217,6 +364,32 @@
       SerialUSB.print("antenna: ");
       SerialUSB.print(antenna);
       SerialUSB.println(";");
+      if(stateSD){
+        sdRequiredData.print(hour);
+        sdRequiredData.print(";");
+        sdRequiredData.print(minute);
+        sdRequiredData.print(";");
+        sdRequiredData.print(seconds);
+        sdRequiredData.print(";");
+        sdRequiredData.print(year);
+        sdRequiredData.print(";");
+        sdRequiredData.print(month);
+        sdRequiredData.print(";");
+        sdRequiredData.print(day);
+        sdRequiredData.print(";");
+        sdRequiredData.print(latitude);
+        sdRequiredData.print(";");
+        sdRequiredData.print(longitude);
+        sdRequiredData.print(";");
+        sdRequiredData.print(lat);
+        sdRequiredData.print(";");
+        sdRequiredData.print(lon);
+        sdRequiredData.print(";");
+        sdRequiredData.print(altitude);
+        sdRequiredData.print(";");
+        sdRequiredData.print(antenna);
+        sdRequiredData.print(";");
+      }
     }
     else{
       frame.print("failed");
@@ -241,7 +414,8 @@
       frame.print(";");
       frame.print("failed");
       frame.print(";");
-      frame.println("failed");
+      frame.print("failed");
+      frame.print(";");
 
 
       SerialUSB.print("hour: ");
@@ -280,10 +454,114 @@
       SerialUSB.print("antenna: ");
       SerialUSB.print("failed");
       SerialUSB.println(";");
+      if(stateSD){
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+      }
     }
-    
+    if(statePixy){
+      frame.print(numberOfBlocks);
+      frame.print(";");
+      frame.print(blue);
+      frame.print(";");
+      frame.print(yellow);
+      frame.print(";");
+      frame.print(green);
+      frame.print(";");
+      frame.print(other);
+
+      SerialUSB.print("Count: ");
+      SerialUSB.print(numberOfBlocks);
+      SerialUSB.print(";");
+      SerialUSB.print("Blue: ");
+      SerialUSB.print(blue);
+      SerialUSB.print(";");
+      SerialUSB.print("Yellow: ");
+      SerialUSB.print(yellow);
+      SerialUSB.print(";");
+      SerialUSB.print("Green: ");
+      SerialUSB.print(green);
+      SerialUSB.print(";");
+      SerialUSB.print("Other: ");
+      SerialUSB.print(other);
+      SerialUSB.println(";");
+      if(stateSD){
+        sdRequiredData.print(numberOfBlocks);
+        sdRequiredData.print(";");
+        sdRequiredData.print(blue);
+        sdRequiredData.print(";");
+        sdRequiredData.print(yellow);
+        sdRequiredData.print(";");
+        sdRequiredData.print(green);
+        sdRequiredData.print(";");
+        sdRequiredData.println(other);
+      }
+    }
+    else{
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+      frame.print(";");
+      frame.print("failed");
+
+      SerialUSB.print("Count: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("Blue: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("Yellow: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("Green: ");
+      SerialUSB.print("failed");
+      SerialUSB.print(";");
+      SerialUSB.print("Other: ");
+      SerialUSB.print("failed");
+      SerialUSB.println(";");
+      if(stateSD){
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.print("failed");
+        sdRequiredData.print(";");
+        sdRequiredData.println("failed");
+      }
+    }
     radio.transmit(frame);
     frame.clear();
+    if(stateSD){
+      sdRequiredData.close();
+    }
   }
 //End Transmit
 
@@ -293,16 +571,20 @@
     stateBMP280 = initBMP();
     stateMPU6050 = initMPU6050();
     stateSE014 = true;
-    //statePixy = initPixy(); 
+    statePixy = initPixy();
     setupSE014();
     stateHM330 = initHM330();
     setupLM35();
     stateLM35 = true;
+    stateSD = initSD();
   }
 //End init
 
 //Region GetData
   void TransmitDataClass::getTransmitDataClass(){
+    if(!stateSD){
+      stateSD = initSD();
+    }
     if(stateBMP280){
       getBMPData();
     }
@@ -331,6 +613,7 @@
     }
     getSE014Data(); // default 0
     getLM35Data();
+    index++;    
   }
 //End GetData
 
@@ -378,6 +661,18 @@
 
   void TransmitDataClass::getBMPData() {
     bmp.measureTemperatureAndPressure(T, P);
+    if(indexBMP==0)
+      firstPressure = P;
+    indexBMP++;
+  }
+
+  void TransmitDataClass::getOnlyBMPData(){
+    if(!stateBMP280){
+      stateBMP280 = initBMP();
+    }
+    if(stateBMP280){
+      getBMPData();
+    }
   }
 
   void TransmitDataClass::printBMPValue(){
@@ -399,6 +694,17 @@
           Fastwire::setup(400, true);
       #endif
 
+  }
+
+  void TransmitDataClass::getOnlyMPU6050Data(){
+    switch(stateHM330){
+      case NO_ERROR:
+        getHM330Data();
+        break;
+      default:
+        stateHM330 = initHM330();
+        break;
+    }
   }
 
   bool TransmitDataClass::initMPU6050() {
@@ -680,6 +986,7 @@
 //Region Pixy ///Kamera
   bool TransmitDataClass::initPixy(){
     if(pixy.init()==PIXY_RESULT_OK){
+      pixy.init();
       return true;
     }
     else{
@@ -688,9 +995,33 @@
   }
   void TransmitDataClass::getPixyData(){
     pixy.ccc.getBlocks();
+    for(int i=0;i<pixy.ccc.numBlocks;i++){
+      SerialUSB.println(pixy.ccc.blocks[i].m_width);
+      SerialUSB.println(pixy.ccc.blocks[i].m_height);
+      switch(pixy.ccc.blocks[i].m_signature){
+        case 4:
+          green = green + (pixy.ccc.blocks[i].m_width * pixy.ccc.blocks[i].m_height);
+          break;
+        case 3:
+          yellow = yellow + (pixy.ccc.blocks[i].m_width * pixy.ccc.blocks[i].m_height);
+          break;
+        case 5:
+          blue = blue + (pixy.ccc.blocks[i].m_width * pixy.ccc.blocks[i].m_height);
+          break;
+      }
+    }
+    numberOfBlocks = pixy.ccc.numBlocks;    
+    green = green*100/pixyRes;
+    yellow = yellow*100/pixyRes;
+    blue = blue*100/pixyRes;
+    other = 100-green-yellow-blue;
   }
   void TransmitDataClass::printPixyValue(){
     SerialUSB.println(pixy.ccc.numBlocks);
+    SerialUSB.println(green);
+    SerialUSB.println(yellow);
+    SerialUSB.println(blue);
+    SerialUSB.println(other);
   }
 //End Pixy
 
@@ -752,3 +1083,13 @@
     stateGPS = true;
   }
 //End GPS
+//Region SD
+  bool TransmitDataClass::initSD(){
+    if (!SD.begin(11)) {
+      SerialUSB.println("SD initialization failed!");
+      return false;
+    }
+    SerialUSB.println("SD initialization done.");
+    return true;
+  }
+//End SD

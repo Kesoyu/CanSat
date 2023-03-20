@@ -2,7 +2,6 @@
 #include "TransmitDataClass.h"
 #include "softwareStateEnum.cpp"
 #include <Adafruit_GPS.h>
-// Connect to the GPS on the hardware port
 
 #define GPSSerial Serial
 
@@ -17,36 +16,34 @@ Adafruit_GPS GPS(&GPSSerial);
 #define GPSECHO false
 
 void setup() {
-  SerialUSB.begin(115200);
+  delay(1000);
+  Serial.begin(115200);
   testObject.initTransmitDataClass();
   GPS.begin(9600);
-  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA); //turn on RMC (recommended minimum) and GGA (fix data) including altitude
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // 1 Hz update rate
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
   GPS.sendCommand(PGCMD_ANTENNA);
 
   delay(1000);
 
   
-  GPSSerial.println(PMTK_Q_RELEASE); // Ask for firmware version
+  GPSSerial.println(PMTK_Q_RELEASE);
+  SerialUSB.println("Setup");
 }
 
 uint32_t timer = millis();
+int counter = 0;
 
 void loop() {
   char c = GPS.read();
-  // if you want to debug, this is a good time to do it!
+
   if (GPSECHO)
     if (c) SerialUSB.print(c);
-  // if a sentence is received, we can check the checksum, parse it...
+  
   if (GPS.newNMEAreceived()) {
-    // a tricky thing here is if we print the NMEA sentence, or data
-    // we end up not listening and catching other sentences!
-    // so be very wary if using OUTPUT_ALLDATA and trying to print out data
-    //SerialUSB.print(GPS.lastNMEA()); // this also sets the newNMEAreceived() flag to false
-    if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
-      return; // we can fail to parse a sentence in which case we should just wait for another
+    if (!GPS.parse(GPS.lastNMEA()))
+      return;
   }
-  // approximately every 2 seconds or so, print out the current stats
   if (millis() - timer > 1000) {
     timer = millis(); // reset the timer
     if (GPS.fix) {
@@ -54,26 +51,26 @@ void loop() {
     }
     switch(state) {
       case wait:
-        //testObject.getTransmitDataClass();
-        //testObject.transmitTransmitDataClass();
-        //testObject.printTransmitDataClass();
+        testObject.getOnlyMPU6050Data();
+        testObject.getOnlyBMPData();
+        if(testObject.firstPressure-testObject.P>30){
+          state = action;
+        }
         state = action;
+        testObject.transmitTransmitDataClass();
+        delay(30000);
         break;
       case action:
+        counter++;
         testObject.getTransmitDataClass();
         testObject.transmitTransmitDataClass();
-        //testObject.printTransmitDataClass();
-        //testObject.printMPU6050Value();
-        //testObject.calcMPU6050Error();
-        //testObject.getMPU6050Data();
-        //state = recovery;
+        if(counter==900)
+          state = recovery;
         break;
       case recovery:
-        //SerialUSB.println(state);
-        state = wait;
+        testObject.transmitTransmitDataClass();
+        delay(30000);
         break;
     }
   }
-  SerialUSB.println("Witaj Świecie");
-  delay(1000);
 }

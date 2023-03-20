@@ -1,10 +1,13 @@
 ﻿using LiveCharts;
 using LiveCharts.Configurations;
+using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +16,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -42,6 +46,7 @@ namespace charts
                .Y(model => model.Value);           //use the value property as Y
 
             //lets save the mapper globally.
+
             Charting.For<MeasureModel>(mapper);
 
             hPa.LabelFormatter = val => val + " hPa";
@@ -51,9 +56,9 @@ namespace charts
             ChartValues = new ChartValues<MeasureModel>();
             TemperatureValues = new ChartValues<MeasureModel>();
             PressureValues = new ChartValues<MeasureModel>();
-            GeoXValues = new ChartValues<MeasureModel>();
-            GeoYValues = new ChartValues<MeasureModel>();
-            GeoZValues = new ChartValues<MeasureModel>();
+            YawValues = new ChartValues<MeasureModel>();
+            RollValues = new ChartValues<MeasureModel>();
+            PitchValues = new ChartValues<MeasureModel>();
             AccXValues = new ChartValues<MeasureModel>();
             AccYValues = new ChartValues<MeasureModel>();
             AccZValues = new ChartValues<MeasureModel>();
@@ -64,6 +69,7 @@ namespace charts
             Pm2aValues = new ChartValues<MeasureModel>();
             Pm10aValues = new ChartValues<MeasureModel>();
             HallaValues = new ChartValues<MeasureModel>();
+            Wartosc = "TEST";
 
             //lets set how to display the X Labels
             //DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
@@ -85,12 +91,12 @@ namespace charts
         public ChartValues<MeasureModel> ChartValues { get; set; }
         public ChartValues<MeasureModel> TemperatureValues { get; set; }
         public ChartValues<MeasureModel> PressureValues { get; set; }
-        public ChartValues<MeasureModel> GeoXValues { get; set; }
-        public ChartValues<MeasureModel> GeoYValues { get; set; }
-        public ChartValues<MeasureModel> GeoZValues { get; set; }
         public ChartValues<MeasureModel> AccXValues { get; set; }
         public ChartValues<MeasureModel> AccYValues { get; set; }
         public ChartValues<MeasureModel> AccZValues { get; set; }
+        public ChartValues<MeasureModel> YawValues { get; set; }
+        public ChartValues<MeasureModel> RollValues { get; set; }
+        public ChartValues<MeasureModel> PitchValues { get; set; }
         public ChartValues<MeasureModel> Pm1sValues { get; set; }
         public ChartValues<MeasureModel> Pm2sValues { get; set; }
         public ChartValues<MeasureModel> Pm10sValues { get; set; }
@@ -98,28 +104,41 @@ namespace charts
         public ChartValues<MeasureModel> Pm2aValues { get; set; }
         public ChartValues<MeasureModel> Pm10aValues { get; set; }
         public ChartValues<MeasureModel> HallaValues { get; set; }
-        //public Func<double, string> DateTimeFormatter { get; set; }
-/*        public double AxisStep { get; set; }
-        public double AxisUnit { get; set; }
 
-        public double AxisMax
-        {
-            get { return _axisMax; }
+
+        private string _value;
+        public string Wartosc{
+            get{
+                return _value;
+            }
             set
             {
-                _axisMax = value;
-                OnPropertyChanged("AxisMax");
+                _value = value;
+                OnPropertyChanged("Wartosc");
             }
         }
-        public double AxisMin
-        {
-            get { return _axisMin; }
-            set
-            {
-                _axisMin = value;
-                OnPropertyChanged("AxisMin");
-            }
-        }*/
+/*        //public Func<double, string> DateTimeFormatter { get; set; }
+        *//*        public double AxisStep { get; set; }
+                public double AxisUnit { get; set; }
+
+                public double AxisMax
+                {
+                    get { return _axisMax; }
+                    set
+                    {
+                        _axisMax = value;
+                        OnPropertyChanged("AxisMax");
+                    }
+                }
+                public double AxisMin
+                {
+                    get { return _axisMin; }
+                    set
+                    {
+                        _axisMin = value;
+                        OnPropertyChanged("AxisMin");
+                    }
+                }*/
 
         public bool IsReading { get; set; }
 
@@ -129,6 +148,18 @@ namespace charts
 
             while (IsReading)
             {
+                string Time = string.Empty;
+                string Date = string.Empty;
+                string Lat = string.Empty;
+                string Lon = string.Empty;
+                string Count = string.Empty;
+                string Blue = string.Empty;
+                string Yellow = string.Empty;
+                string Green = string.Empty;
+                string Other = string.Empty;
+                double Latitude = 0;
+                double Longitude = 0;
+
                 Thread.Sleep(1000);
                 var now = DateTime.Now;
 
@@ -140,10 +171,13 @@ namespace charts
                     Value = _trend
                 });
                 canSatData.GetLastRecords(TemperatureValues, PressureValues, AccXValues, AccYValues, AccZValues,
-                                          GeoXValues, GeoYValues, GeoZValues, Pm1sValues, Pm2sValues, Pm10sValues,
-                                          Pm1aValues, Pm2aValues, Pm10aValues, HallaValues, counter);
+                                          YawValues, RollValues, PitchValues, Pm1sValues, Pm2sValues, Pm10sValues,
+                                          Pm1aValues, Pm2aValues, Pm10aValues, HallaValues, counter, out Time, out Date, out Lat, out Lon,
+                                          out Count, out Blue, out Yellow, out Green, out Other, out Latitude, out Longitude);
                 counter++;
-
+                SetGPS(Time, Date, Lat, Lon);
+                SetPixy(Count, Blue, Yellow, Green, Other);
+                SetMap(Latitude, Longitude);
                 //SetAxisLimits(now);
 
                 //lets only use the last 50 values
@@ -155,9 +189,9 @@ namespace charts
                     AccXValues.Clear();
                     AccYValues.Clear();
                     AccZValues.Clear();
-                    GeoXValues.Clear();
-                    GeoYValues.Clear();
-                    GeoZValues.Clear();
+                    YawValues.Clear();
+                    RollValues.Clear();
+                    PitchValues.Clear();
                     Pm1sValues.Clear();
                     Pm2sValues.Clear();
                     Pm10sValues.Clear();
@@ -169,12 +203,37 @@ namespace charts
                 }
             }
         }
-
-       /* private void SetAxisLimits(DateTime now)
+        private void SetMap(double latitude, double longitude)
         {
-            AxisMax = now.Ticks + TimeSpan.FromSeconds(1).Ticks; // lets force the axis to be 1 second ahead
-            AxisMin = now.Ticks - TimeSpan.FromSeconds(8).Ticks; // and 8 seconds behind
-        }*/
+            Dispatcher.Invoke(new Action(() => {
+                MapMap.Center = new Location(latitude, longitude);
+            }));
+        }
+        private void SetPixy(string count, string blue, string yellow, string green, string other)
+        {
+            Dispatcher.Invoke(new Action(() => {
+                Count.Text = "Count: " + count;
+                Blue.Text = "Blue: " + blue + "%";
+                Yellow.Text = "Yellow: " + yellow + "%";
+                Green.Text = "Green: " + green + "%";
+                Other.Text = "Other: " + other + "%";
+            }));
+        }
+        private void SetGPS(string time,string date, string lat, string lon)
+        {
+            Dispatcher.Invoke(new Action(() => {
+                Time.Text = "Time: "+time;
+                Date.Text = "Date: "+date;
+                Latitude.Text = "Latitude: " + lat;
+                Longitude.Text = "Longitude: " + lon;
+            }));
+        }
+
+        /* private void SetAxisLimits(DateTime now)
+         {
+             AxisMax = now.Ticks + TimeSpan.FromSeconds(1).Ticks; // lets force the axis to be 1 second ahead
+             AxisMin = now.Ticks - TimeSpan.FromSeconds(8).Ticks; // and 8 seconds behind
+         }*/
 
         private void InjectStopOnClick(object sender, RoutedEventArgs e)
         {

@@ -8,6 +8,8 @@
 #include <Seeed_HM330X.h>
 #include <Pixy2.h>
 #include <cmath>
+#include <SPI.h>
+#include <SD.h>
 using namespace CanSatKit;
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
@@ -18,6 +20,9 @@ using namespace CanSatKit;
 
 class TransmitDataClass {
   private:
+    int index;
+    int indexBMP;
+    const static int SDPin = 11;
     MPU6050 accelgyro;      ///< Instance of the MPU6050 module
     int16_t ax,             ///< Accelerometer x axis value
     ay,                     ///< Accelerometer y axis value
@@ -36,8 +41,6 @@ class TransmitDataClass {
 
       
     BMP280 bmp;         ///< Instance of the BMP280 module
-    double T            ///< Contains a BMP35 atmospheric pressure value
-    , P;                ///< Contains a BMP35 temperature value
 
     HM330X sensor;      ///< Instance of the HM330 module
     uint8_t buf[30];    ///< Buffor for a validation a HM330 Data
@@ -57,6 +60,13 @@ class TransmitDataClass {
     
     int Halla;              ///< Detecting increased of magnetic field 0:1 values
     Pixy2 pixy;             ///< Pixy UART connection
+    const int pixyRes = 65096; ///< Resolutions of pixy camera detection square
+    float blue;
+    float yellow;
+    float green;
+    float other;
+    int numberOfBlocks;
+
     float temperature;      ///< Temperature LM35 value
     Frame frame;            ///< Frame for transmit
     
@@ -83,10 +93,12 @@ class TransmitDataClass {
     uint8_t satellites;     ///< Number of satellites in use
     uint8_t antenna;        ///< Antenna that is used (from PGTOP)
   public:
-  
-    bool stateBMP280, stateMPU6050, stateLM35, stateGPS, stateSE014;  ///< status of module
-    HM330XErrorCode stateHM330;                                       ///< status of module
-    bool statePixy;                                                   ///< status of module
+    double firstPressure;
+    double T                ///< Contains a BMP35 atmospheric pressure value
+        , P;                ///< Contains a BMP35 temperature value
+    bool stateBMP280, stateMPU6050, stateLM35, stateGPS, stateSE014, stateSD;  ///< status of module
+    HM330XErrorCode stateHM330;                                                ///< status of module
+    bool statePixy;                                                            ///< status of module
 
     ///Region Main Functions
       TransmitDataClass();                ///< Main Constructor of the TransmitDataClass
@@ -101,6 +113,7 @@ class TransmitDataClass {
       bool initBMP();         ///< Initalize BMP280 module
       void setBMP(int);       ///< Setup BMP280 module
       void getBMPData();      ///< Get BMP280 Data
+      void getOnlyBMPData();
       void printBMPValue();   ///< Print BMP280 Value
     ///End BMP280
 
@@ -109,6 +122,7 @@ class TransmitDataClass {
       void calcMPU6050Error();
       void setupMPU6050();        ///< Setup MPU6050 module
       void getMPU6050Data();      ///< Get and validate MPU6050 Data
+      void getOnlyMPU6050Data(); 
       void printMPU6050Value();   ///< Print MPU6050 Value
     ///End MPU6050
 
@@ -147,6 +161,9 @@ class TransmitDataClass {
                       uint8_t, uint8_t, bool, uint8_t, float, float,          ///< I have gave up at this part:#
                       char, char, float, float, float, uint8_t, uint8_t);     ///< set GPS Data
     ///End GPS
+    ///Region SD     
+      bool initSD();    
+    ///End SD
 
 
 };

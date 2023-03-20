@@ -4,12 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:charts"
+        xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="450" Width="800">
     <Grid Background="Black" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="200"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -18,9 +20,47 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="0" Click="InjectStopOnClick">
-            Inject/Stop Data
-        </Button>
+        
+        
+        <Grid Grid.Row="0" Height="auto" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Button x:Name="mainButton" Click="InjectStopOnClick" Content="Inject Data"/>
+                <TextBlock x:Name="Time" Text="Time: " Background="White" Foreground="Black" Grid.Column="1"/>
+                <TextBlock x:Name="Date" Text="Date: " Background="White" Foreground="Black" Grid.Column="1"/>
+                <TextBlock x:Name="Latitude" Text="Lat: " Background="White" Foreground="Black" Grid.Column="1"/>
+                <TextBlock x:Name="Longitude" Text="Lon: " Background="White" Foreground="Black" Grid.Column="1"/>
+            </StackPanel>
+            <Grid Grid.Column="1" Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="Count" Grid.ColumnSpan="2" Height="auto" Text="Count: "/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock x:Name="Blue" Text="Blue: "/>
+                        <TextBlock x:Name="Yellow" Text="Yellow: "/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1">
+                        <TextBlock x:Name="Green" Text="Green: "/>
+                        <TextBlock x:Name="Other" Text="Other: "/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            
+        </Grid>
+        <m:Map x:Name="MapMap" CredentialsProvider="AttsGkqIHCOIEA11KtQZDphl5bi8lppin64jeg-ZOOhiS4cdHA_EXJwHSbyZi4Xo" Mode="Road" Grid.Column="1" ZoomLevel="14" Center="50.31428055,18.781576310579183">
+            <Canvas>
+            </Canvas>
+        </m:Map>
         <!--Here we disable tooltips and hovering to get a better performance-->
         <lvc:CartesianChart Grid.Row="1" LegendLocation="Right" Foreground="Wheat" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Series>
@@ -52,7 +92,7 @@
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
                                 Stroke="Crimson"
-                                Title="Celsius(°C)"
+                                Title="Celsius"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
             </lvc:CartesianChart.Series>
@@ -128,25 +168,25 @@
         </lvc:CartesianChart>
         <lvc:CartesianChart Grid.Row="2" Grid.Column="1" LegendLocation="Right" Foreground="Wheat" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Series>
-                <lvc:LineSeries Values="{Binding GeoXValues}" 
+                <lvc:LineSeries Values="{Binding YawValues}" 
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
                                 Stroke="Red"
-                                Title="Gyroscope X"
+                                Title="Yaw"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
-                <lvc:LineSeries Values="{Binding GeoYValues}" 
+                <lvc:LineSeries Values="{Binding RollValues}" 
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
                                 Stroke="Green"
-                                Title="Gyroscope Y"
+                                Title="Roll"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
-                <lvc:LineSeries Values="{Binding GeoZValues}" 
+                <lvc:LineSeries Values="{Binding PitchValues}" 
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
                                 Stroke="Blue"
-                                Title="Gyroscope Z"
+                                Title="Pitch"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
             </lvc:CartesianChart.Series>
