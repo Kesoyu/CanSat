@@ -571,7 +571,7 @@
     stateBMP280 = initBMP();
     stateMPU6050 = initMPU6050();
     stateSE014 = true;
-    statePixy = initPixy();
+    //statePixy = initPixy();
     setupSE014();
     stateHM330 = initHM330();
     setupLM35();
@@ -605,12 +605,12 @@
         stateHM330 = initHM330();
         break;
     }
-    if(statePixy){
-      getPixyData();
-    }
-    else{
-      statePixy = initPixy();
-    }
+    // if(statePixy){
+    //   getPixyData();
+    // }
+    // else{
+    //   statePixy = initPixy();
+    // }
     getSE014Data(); // default 0
     getLM35Data();
     index++;    
@@ -623,7 +623,7 @@
       printMPU6050Value();
       printHM330();
       printSE014Value();
-      //printPixyValue();
+      printPixyValue();
       printLM35Value();
   }
 //End PrintData
@@ -694,17 +694,6 @@
           Fastwire::setup(400, true);
       #endif
 
-  }
-
-  void TransmitDataClass::getOnlyMPU6050Data(){
-    switch(stateHM330){
-      case NO_ERROR:
-        getHM330Data();
-        break;
-      default:
-        stateHM330 = initHM330();
-        break;
-    }
   }
 
   bool TransmitDataClass::initMPU6050() {
@@ -969,6 +958,18 @@
     }
       //SerialUSB.println("");
   }
+  
+  void TransmitDataClass::getOnlyHM330Data(){
+    switch(stateHM330){
+      case NO_ERROR:
+        getHM330Data();
+        break;
+      default:
+        stateHM330 = initHM330();
+        break;
+    }
+  }
+  
 //End HM330
 
 //Region SE014 ///Czujnik Halla wzrostowy
@@ -985,12 +986,14 @@
 
 //Region Pixy ///Kamera
   bool TransmitDataClass::initPixy(){
-    if(pixy.init()==PIXY_RESULT_OK){
-      pixy.init();
-      return true;
-    }
-    else{
-      return false;
+    int result = pixy.init();
+    switch(result){
+      case PIXY_RESULT_OK:
+        return true;
+        break;
+      default:
+        return false;
+        break;
     }
   }
   void TransmitDataClass::getPixyData(){
@@ -1027,7 +1030,7 @@
 
 //Region LM35 //Termometr analogowy
   float TransmitDataClass::lm35_raw_to_temperature(int raw) {
-    float voltage = raw * 5 / (std::pow(2, 12));
+    float voltage = raw * 3.3 / (std::pow(2, 12));
     float assap = 100.0 * voltage;
     return assap;
   }

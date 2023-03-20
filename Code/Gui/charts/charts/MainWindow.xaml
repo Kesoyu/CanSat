@@ -62,7 +62,6 @@
             <Canvas>
             </Canvas>
         </m:Map>
-        <!--Here we disable tooltips and hovering to get a better performance-->
         <lvc:CartesianChart Grid.Row="1" LegendLocation="Right" Foreground="Wheat" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Series>
                 <lvc:LineSeries Values="{Binding PressureValues}" 

@@ -122,7 +122,6 @@ class TransmitDataClass {
       void calcMPU6050Error();
       void setupMPU6050();        ///< Setup MPU6050 module
       void getMPU6050Data();      ///< Get and validate MPU6050 Data
-      void getOnlyMPU6050Data(); 
       void printMPU6050Value();   ///< Print MPU6050 Value
     ///End MPU6050
 
@@ -133,6 +132,7 @@ class TransmitDataClass {
       HM330XErrorCode parse_result_value(uint8_t* data);                            ///< Parse Result Value
 
       void getHM330Data();      ///< Get HM330 Data
+      void getOnlyHM330Data(); 
       void printHM330();        ///< Print HM330 Data
     ///End HM330
 

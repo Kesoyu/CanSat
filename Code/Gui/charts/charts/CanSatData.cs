@@ -214,7 +214,7 @@ namespace charts
                 Delimiter = ";",
             };
 
-            var streamReader = File.OpenText("C:\\CanSat\\DATA.txt");
+            var streamReader = File.OpenText("C:\\CanSat\\CanSat\\DATA.txt");
             var csvReader = new CsvReader(streamReader, csvConfig);
 
 
@@ -250,6 +250,12 @@ namespace charts
             {
                 Count = cc,
                 Value = data[data.Count - 1 - helper].Temp
+                //Value = data.Last().temp
+            });
+            firstt.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Temp
                 //Value = data.Last().temp
             });
             firstt.Add(new MeasureModel

@@ -34,16 +34,14 @@ namespace charts
         Random random = new Random();
         const int length = 10;
 
-        //private double _axisMax;
-        //private double _axisMin;
         private double _trend;
         private double counter = 1;
         public MainWindow()
         {
             InitializeComponent();
             var mapper = Mappers.Xy<MeasureModel>()
-               .X(model => model.Count)   //use DateTime.Ticks as X
-               .Y(model => model.Value);           //use the value property as Y
+               .X(model => model.Count)             //use DateTime.Ticks as X
+               .Y(model => model.Value);            //use the value property as Y
 
             //lets save the mapper globally.
 
@@ -55,7 +53,6 @@ namespace charts
             ugm3s.LabelFormatter = val => val + " µg/m3";
             degree.LabelFormatter = val => val + "°";
             ms.LabelFormatter = val => val + "m/s";
-            //the values property will store our values array
             ChartValues = new ChartValues<MeasureModel>();
             TemperatureValues = new ChartValues<MeasureModel>();
             TemperatureGroundValues = new ChartValues<MeasureModel>();
@@ -81,19 +78,6 @@ namespace charts
             Pm10aGroundValues = new ChartValues<MeasureModel>();
             HallaValues = new ChartValues<MeasureModel>();
             Wartosc = "TEST";
-
-            //lets set how to display the X Labels
-            //DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
-
-            //AxisStep forces the distance between each separator in the X axis
-            //AxisStep = TimeSpan.FromSeconds(1).Ticks;
-            //AxisUnit forces lets the axis know that we are plotting seconds
-            //this is not always necessary, but it can prevent wrong labeling
-            //AxisUnit = TimeSpan.TicksPerSecond;
-
-            //SetAxisLimits(DateTime.Now);
-
-            //The next code simulates data changes every 300 ms
 
             IsReading = false;
 
@@ -137,28 +121,6 @@ namespace charts
                 OnPropertyChanged("Wartosc");
             }
         }
-        /*        //public Func<double, string> DateTimeFormatter { get; set; }
-                *//*        public double AxisStep { get; set; }
-                        public double AxisUnit { get; set; }
-
-                        public double AxisMax
-                        {
-                            get { return _axisMax; }
-                            set
-                            {
-                                _axisMax = value;
-                                OnPropertyChanged("AxisMax");
-                            }
-                        }
-                        public double AxisMin
-                        {
-                            get { return _axisMin; }
-                            set
-                            {
-                                _axisMin = value;
-                                OnPropertyChanged("AxisMin");
-                            }
-                        }*/
 
         public bool IsReading { get; set; }
 
@@ -206,7 +168,6 @@ namespace charts
                 SetGPS(Time, Date, Lat, Lon);
                 SetPixy(Count, Blue, Yellow, Green, Other);
                 SetMap(Latitude, Longitude);
-                //SetAxisLimits(now);
 
                 //lets only use the last 50 values
                 if (ChartValues.Count >= 50)
@@ -266,12 +227,6 @@ namespace charts
                 Longitude.Text = "Longitude: " + lon;
             }));
         }
-
-        /* private void SetAxisLimits(DateTime now)
-         {
-             AxisMax = now.Ticks + TimeSpan.FromSeconds(1).Ticks; // lets force the axis to be 1 second ahead
-             AxisMin = now.Ticks - TimeSpan.FromSeconds(8).Ticks; // and 8 seconds behind
-         }*/
 
         private void InjectStopOnClick(object sender, RoutedEventArgs e)
         {
