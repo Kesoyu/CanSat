@@ -49,7 +49,7 @@ void loop() {
     if (!GPS.parse(GPS.lastNMEA()))
       return;
   }
-  if (millis() - timer > 5000) {
+  if (millis() - timer > 1000) {
     timer = millis(); // reset the timer
     if (GPS.fix) {
       testObject.setGPSData(GPS.hour, GPS.minute, GPS.seconds, GPS.milliseconds, GPS.year, GPS.month, GPS.day, GPS.fix, GPS.fixquality, GPS.latitude, GPS.longitude, GPS.lat, GPS.lon, GPS.speed, GPS.angle, GPS.altitude, GPS.satellites, GPS.antenna);   
