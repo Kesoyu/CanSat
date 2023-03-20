@@ -1,6 +1,6 @@
 enum softwareState
 {
-    wait = 0, //zamiast średników stosuje się przecinki
+    wait = 0,
     action = 1,
     recovery = 2
 };
