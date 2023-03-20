@@ -11,7 +11,8 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid Background="Black" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="200"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -20,8 +21,8 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
-        
+
+
         <Grid Grid.Row="0" Height="auto" Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -55,9 +56,9 @@
                     </StackPanel>
                 </Grid>
             </Grid>
-            
+
         </Grid>
-        <m:Map x:Name="MapMap" CredentialsProvider="AttsGkqIHCOIEA11KtQZDphl5bi8lppin64jeg-ZOOhiS4cdHA_EXJwHSbyZi4Xo" Mode="Road" Grid.Column="1" ZoomLevel="14" Center="50.31428055,18.781576310579183">
+        <m:Map x:Name="MapMap" Grid.RowSpan="2" CredentialsProvider="AttsGkqIHCOIEA11KtQZDphl5bi8lppin64jeg-ZOOhiS4cdHA_EXJwHSbyZi4Xo" Mode="Road" Grid.Column="1" ZoomLevel="14" Center="50.31428055,18.781576310579183">
             <Canvas>
             </Canvas>
         </m:Map>
@@ -71,6 +72,13 @@
                                 Fill="Transparent"
                                 Title="Atmospheric pressure"
                                 Stroke="#1A7AC0"/>
+                <lvc:LineSeries Values="{Binding PressureGroundValues}" 
+                                LineSmoothness="3"
+                                StrokeThickness="5"
+                                PointGeometry="{x:Null}"
+                                Fill="Transparent"
+                                Title="1st Atmospheric pressure"
+                                Stroke="Cyan"/>
             </lvc:CartesianChart.Series>
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis
@@ -91,8 +99,15 @@
                 <lvc:LineSeries Values="{Binding TemperatureValues}" 
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
-                                Stroke="Crimson"
+                                Stroke="Red"
                                 Title="Celsius"
+                                PointGeometry="{x:Null}"
+                                Fill="Transparent"/>
+                <lvc:LineSeries Values="{Binding TemperatureGroundValues}" 
+                                LineSmoothness="2"
+                                StrokeThickness="4" 
+                                Stroke="#FF4500"
+                                Title="1st Celsius"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
             </lvc:CartesianChart.Series>
@@ -131,7 +146,7 @@
                 </lvc:Axis>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
-        <lvc:CartesianChart Grid.Row="1" Grid.Column="1" LegendLocation="Right" Foreground="Wheat" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
+        <lvc:CartesianChart Grid.Row="4" Grid.Column="0" LegendLocation="Right" Foreground="Wheat" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Series>
                 <lvc:LineSeries Values="{Binding AccXValues}" 
                                 LineSmoothness="3"
@@ -165,6 +180,9 @@
                     </lvc:Axis.Separator>
                 </lvc:Axis>
             </lvc:CartesianChart.AxisX>
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis x:Name="ms"/>
+            </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
         <lvc:CartesianChart Grid.Row="2" Grid.Column="1" LegendLocation="Right" Foreground="Wheat" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Series>
@@ -200,6 +218,9 @@
                     </lvc:Axis.Separator>
                 </lvc:Axis>
             </lvc:CartesianChart.AxisX>
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis x:Name="degree"/>
+            </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
         <lvc:CartesianChart Grid.Row="3" Grid.Column="1" Foreground="Wheat" LegendLocation="Right" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Series>
@@ -210,11 +231,25 @@
                                 PointGeometry="{x:Null}"
                                 Title="PM1.0 Standart"
                                 Fill="Transparent"/>
+                <lvc:LineSeries Values="{Binding Pm1sGroundValues}" 
+                                LineSmoothness="3"
+                                StrokeThickness="5" 
+                                Stroke="Orange"
+                                PointGeometry="{x:Null}"
+                                Title="1st PM1.0 Standart"
+                                Fill="Transparent"/>
                 <lvc:LineSeries Values="{Binding Pm2sValues}" 
                                 LineSmoothness="3"
                                 StrokeThickness="10" 
                                 Stroke="Green"
                                 Title="PM2.5 Standart"
+                                PointGeometry="{x:Null}"
+                                Fill="Transparent"/>
+                <lvc:LineSeries Values="{Binding Pm2sGroundValues}" 
+                                LineSmoothness="3"
+                                StrokeThickness="5" 
+                                Stroke="Lime"
+                                Title="1st PM2.5 Standart"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
                 <lvc:LineSeries Values="{Binding Pm10sValues}" 
@@ -224,25 +259,11 @@
                                 Title="PM10.0 Standart"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
-                <lvc:LineSeries Values="{Binding Pm1aValues}" 
+                <lvc:LineSeries Values="{Binding Pm10sGroundValues}" 
                                 LineSmoothness="3"
                                 StrokeThickness="5" 
-                                Stroke="DarkRed"
-                                Title="PM1.0 Atmospheric"
-                                PointGeometry="{x:Null}"
-                                Fill="Transparent"/>
-                <lvc:LineSeries Values="{Binding Pm2aValues}" 
-                                LineSmoothness="3"
-                                StrokeThickness="5" 
-                                Stroke="DarkGreen"
-                                Title="PM2.5 Atmospheric"
-                                PointGeometry="{x:Null}"
-                                Fill="Transparent"/>
-                <lvc:LineSeries Values="{Binding Pm10aValues}" 
-                                LineSmoothness="3"
-                                StrokeThickness="5" 
-                                Stroke="DarkBlue"
-                                Title="PM01.0 Atmospheric"
+                                Stroke="Aqua"
+                                Title="1st PM10.0 Standart"
                                 PointGeometry="{x:Null}"
                                 Fill="Transparent"/>
             </lvc:CartesianChart.Series>
@@ -257,7 +278,66 @@
                 </lvc:Axis>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis x:Name="ugm3"/>
+                <lvc:Axis x:Name="ugm3s"/>
+            </lvc:CartesianChart.AxisY>
+        </lvc:CartesianChart>
+        <lvc:CartesianChart Grid.Row="4" Grid.Column="1" Foreground="Wheat" LegendLocation="Right" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
+            <lvc:CartesianChart.Series>
+                <lvc:LineSeries Values="{Binding Pm1aValues}" 
+                                LineSmoothness="3"
+                                StrokeThickness="10" 
+                                Stroke="Red"
+                                Title="PM1.0 Atmospheric"
+                                PointGeometry="{x:Null}"
+                                Fill="Transparent"/>
+                <lvc:LineSeries Values="{Binding Pm1aGroundValues}" 
+                                LineSmoothness="3"
+                                StrokeThickness="5" 
+                                Stroke="Orange"
+                                Title="1st PM1.0 Atmospheric"
+                                PointGeometry="{x:Null}"
+                                Fill="Transparent"/>
+                <lvc:LineSeries Values="{Binding Pm2aValues}" 
+                                LineSmoothness="3"
+                                StrokeThickness="10" 
+                                Stroke="Green"
+                                Title="PM2.5 Atmospheric"
+                                PointGeometry="{x:Null}"
+                                Fill="Transparent"/>
+                <lvc:LineSeries Values="{Binding Pm2aGroundValues}" 
+                                LineSmoothness="3"
+                                StrokeThickness="5" 
+                                Stroke="Lime"
+                                Title="1st PM2.5 Atmospheric"
+                                PointGeometry="{x:Null}"
+                                Fill="Transparent"/>
+                <lvc:LineSeries Values="{Binding Pm10aValues}" 
+                                LineSmoothness="3"
+                                StrokeThickness="10" 
+                                Stroke="Blue"
+                                Title="PM01.0 Atmospheric"
+                                PointGeometry="{x:Null}"
+                                Fill="Transparent"/>
+                <lvc:LineSeries Values="{Binding Pm10aGroundValues}" 
+                                LineSmoothness="3"
+                                StrokeThickness="5" 
+                                Stroke="Aqua"
+                                Title="1st PM2.5 Atmospheric"
+                                PointGeometry="{x:Null}"
+                                Fill="Transparent"/>
+            </lvc:CartesianChart.Series>
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis
+                          MaxValue="50" 
+                          MinValue="0"
+                          Unit="1">
+                    <lvc:Axis.Separator>
+                        <lvc:Separator Step="5" />
+                    </lvc:Axis.Separator>
+                </lvc:Axis>
+            </lvc:CartesianChart.AxisX>
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis x:Name="ugm3a"/>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
     </Grid>

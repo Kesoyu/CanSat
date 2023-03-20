@@ -985,12 +985,14 @@
 
 //Region Pixy ///Kamera
   bool TransmitDataClass::initPixy(){
-    if(pixy.init()==PIXY_RESULT_OK){
-      pixy.init();
-      return true;
-    }
-    else{
-      return false;
+    int result = pixy.init();
+    switch(result){
+      case PIXY_RESULT_OK:
+        return true;
+        break;
+      default:
+        return false;
+        break;
     }
   }
   void TransmitDataClass::getPixyData(){

@@ -51,11 +51,16 @@ namespace charts
 
             hPa.LabelFormatter = val => val + " hPa";
             Celcius.LabelFormatter = val => val + " °C";
-            ugm3.LabelFormatter = val => val + " µg/m3";
+            ugm3a.LabelFormatter = val => val + " µg/m3";
+            ugm3s.LabelFormatter = val => val + " µg/m3";
+            degree.LabelFormatter = val => val + "°";
+            ms.LabelFormatter = val => val + "°";
             //the values property will store our values array
             ChartValues = new ChartValues<MeasureModel>();
             TemperatureValues = new ChartValues<MeasureModel>();
+            TemperatureGroundValues = new ChartValues<MeasureModel>();
             PressureValues = new ChartValues<MeasureModel>();
+            PressureGroundValues = new ChartValues<MeasureModel>();
             YawValues = new ChartValues<MeasureModel>();
             RollValues = new ChartValues<MeasureModel>();
             PitchValues = new ChartValues<MeasureModel>();
@@ -63,11 +68,17 @@ namespace charts
             AccYValues = new ChartValues<MeasureModel>();
             AccZValues = new ChartValues<MeasureModel>();
             Pm1sValues = new ChartValues<MeasureModel>();
+            Pm1sGroundValues = new ChartValues<MeasureModel>();
             Pm2sValues = new ChartValues<MeasureModel>();
+            Pm2sGroundValues = new ChartValues<MeasureModel>();
             Pm10sValues = new ChartValues<MeasureModel>();
+            Pm10sGroundValues = new ChartValues<MeasureModel>();
             Pm1aValues = new ChartValues<MeasureModel>();
+            Pm1aGroundValues = new ChartValues<MeasureModel>();
             Pm2aValues = new ChartValues<MeasureModel>();
+            Pm2aGroundValues = new ChartValues<MeasureModel>();
             Pm10aValues = new ChartValues<MeasureModel>();
+            Pm10aGroundValues = new ChartValues<MeasureModel>();
             HallaValues = new ChartValues<MeasureModel>();
             Wartosc = "TEST";
 
@@ -90,7 +101,9 @@ namespace charts
         }
         public ChartValues<MeasureModel> ChartValues { get; set; }
         public ChartValues<MeasureModel> TemperatureValues { get; set; }
+        public ChartValues<MeasureModel> TemperatureGroundValues { get; set; }
         public ChartValues<MeasureModel> PressureValues { get; set; }
+        public ChartValues<MeasureModel> PressureGroundValues { get; set; }
         public ChartValues<MeasureModel> AccXValues { get; set; }
         public ChartValues<MeasureModel> AccYValues { get; set; }
         public ChartValues<MeasureModel> AccZValues { get; set; }
@@ -98,13 +111,18 @@ namespace charts
         public ChartValues<MeasureModel> RollValues { get; set; }
         public ChartValues<MeasureModel> PitchValues { get; set; }
         public ChartValues<MeasureModel> Pm1sValues { get; set; }
+        public ChartValues<MeasureModel> Pm1sGroundValues { get; set; }
         public ChartValues<MeasureModel> Pm2sValues { get; set; }
+        public ChartValues<MeasureModel> Pm2sGroundValues { get; set; }
         public ChartValues<MeasureModel> Pm10sValues { get; set; }
+        public ChartValues<MeasureModel> Pm10sGroundValues { get; set; }
         public ChartValues<MeasureModel> Pm1aValues { get; set; }
+        public ChartValues<MeasureModel> Pm1aGroundValues { get; set; }
         public ChartValues<MeasureModel> Pm2aValues { get; set; }
+        public ChartValues<MeasureModel> Pm2aGroundValues { get; set; }
         public ChartValues<MeasureModel> Pm10aValues { get; set; }
+        public ChartValues<MeasureModel> Pm10aGroundValues { get; set; }
         public ChartValues<MeasureModel> HallaValues { get; set; }
-
 
         private string _value;
         public string Wartosc{
@@ -170,9 +188,17 @@ namespace charts
                     Count = counter,
                     Value = _trend
                 });
-                canSatData.GetLastRecords(TemperatureValues, PressureValues, AccXValues, AccYValues, AccZValues,
-                                          YawValues, RollValues, PitchValues, Pm1sValues, Pm2sValues, Pm10sValues,
-                                          Pm1aValues, Pm2aValues, Pm10aValues, HallaValues, counter, out Time, out Date, out Lat, out Lon,
+                canSatData.GetLastRecords(TemperatureValues, TemperatureGroundValues,
+                                          PressureValues, PressureGroundValues,
+                                          AccXValues, AccYValues, AccZValues,
+                                          YawValues, RollValues, PitchValues,
+                                          Pm1sValues, Pm1sGroundValues,
+                                          Pm2sValues, Pm2sGroundValues,
+                                          Pm10sValues, Pm10sGroundValues,
+                                          Pm1aValues, Pm1aGroundValues,
+                                          Pm2aValues, Pm2aGroundValues,
+                                          Pm10aValues, Pm10aGroundValues, HallaValues,
+                                          counter, out Time, out Date, out Lat, out Lon,
                                           out Count, out Blue, out Yellow, out Green, out Other, out Latitude, out Longitude);
                 counter++;
                 SetGPS(Time, Date, Lat, Lon);
@@ -185,7 +211,9 @@ namespace charts
                 {
                     ChartValues.Clear();
                     TemperatureValues.Clear();
+                    TemperatureGroundValues.Clear();
                     PressureValues.Clear();
+                    PressureGroundValues.Clear();
                     AccXValues.Clear();
                     AccYValues.Clear();
                     AccZValues.Clear();
@@ -193,11 +221,17 @@ namespace charts
                     RollValues.Clear();
                     PitchValues.Clear();
                     Pm1sValues.Clear();
+                    Pm1sGroundValues.Clear();
                     Pm2sValues.Clear();
+                    Pm2sGroundValues.Clear();
                     Pm10sValues.Clear();
+                    Pm10sGroundValues.Clear();
                     Pm1aValues.Clear();
+                    Pm1aGroundValues.Clear();
                     Pm2aValues.Clear();
+                    Pm2aGroundValues.Clear();
                     Pm10aValues.Clear();
+                    Pm10aGroundValues.Clear();
                     HallaValues.Clear();
                     counter = 1;
                 }

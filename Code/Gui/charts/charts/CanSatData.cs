@@ -214,7 +214,7 @@ namespace charts
                 Delimiter = ";",
             };
 
-            var streamReader = File.OpenText("C:\\CanSat\\DATA.txt");
+            var streamReader = File.OpenText("C:\\CanSat\\CanSat\\DATA.txt");
             var csvReader = new CsvReader(streamReader, csvConfig);
 
 
@@ -229,11 +229,16 @@ namespace charts
                                   csvReader.GetField(30), csvReader.GetField(31), csvReader.GetField(32), csvReader.GetField(33)));
             }
         }
-        public void GetLastRecords(ChartValues<MeasureModel> t, ChartValues<MeasureModel> p, ChartValues<MeasureModel> x,
+        public void GetLastRecords(ChartValues<MeasureModel> t, ChartValues<MeasureModel> firstt, ChartValues<MeasureModel> p,
+                                   ChartValues<MeasureModel> firstp, ChartValues<MeasureModel> x,
                                    ChartValues<MeasureModel> y, ChartValues<MeasureModel> z, ChartValues<MeasureModel> yaw,
-                                   ChartValues<MeasureModel> roll, ChartValues<MeasureModel> pitch, ChartValues<MeasureModel> s1,
-                                   ChartValues<MeasureModel> s2, ChartValues<MeasureModel> s10, ChartValues<MeasureModel> a1,
-                                   ChartValues<MeasureModel> a2, ChartValues<MeasureModel> a10, ChartValues<MeasureModel> h,
+                                   ChartValues<MeasureModel> roll, ChartValues<MeasureModel> pitch,
+                                   ChartValues<MeasureModel> s1, ChartValues<MeasureModel> firsts1,
+                                   ChartValues<MeasureModel> s2, ChartValues<MeasureModel> firsts2,
+                                   ChartValues<MeasureModel> s10, ChartValues<MeasureModel> firsts10,
+                                   ChartValues<MeasureModel> a1, ChartValues<MeasureModel> firsta1,
+                                   ChartValues<MeasureModel> a2, ChartValues<MeasureModel> firsta2,
+                                   ChartValues<MeasureModel> a10, ChartValues<MeasureModel> firsta10, ChartValues<MeasureModel> h,
                                    double cc, out string time, out string date, out string lat, out string lon,
                                    out string count, out string blue, out string yellow, out string green, out string other,
                                    out double latitude, out double longitude)
@@ -247,11 +252,23 @@ namespace charts
                 Value = data[data.Count-1-helper].Temp
                 //Value = data.Last().temp
             });
+            firstt.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Temp
+                //Value = data.Last().temp
+            });
             p.Add(new MeasureModel
             {
                 Count = cc,
                 Value = data[data.Count - 1 - helper].Pressure
                 //Value = data.Last().pressure
+            });
+            firstp.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pressure
+                //Value = data.Last().temp
             });
             x.Add(new MeasureModel
             {
@@ -295,11 +312,23 @@ namespace charts
                 Value = data[data.Count - 1 - helper].Pm1s
                 //Value = data.Last().pm1s
             });
+            firsts1.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm1s
+                //Value = data.Last().temp
+            });
             s2.Add(new MeasureModel
             {
                 Count = cc,
                 Value = data[data.Count - 1 - helper].Pm2s
                 //Value = data.Last().pm2s
+            });
+            firsts2.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm2s
+                //Value = data.Last().temp
             });
             s10.Add(new MeasureModel
             {
@@ -307,11 +336,23 @@ namespace charts
                 Value = data[data.Count - 1 - helper].Pm10s
                 //Value = data.Last().pm10s
             });
+            firsts10.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm10s
+                //Value = data.Last().temp
+            });
             a1.Add(new MeasureModel
             {
                 Count = cc,
                 Value = data[data.Count - 1 - helper].Pm1a
                 //Value = data.Last().pm1a
+            });
+            firsta1.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm1a
+                //Value = data.Last().temp
             });
             a2.Add(new MeasureModel
             {
@@ -320,11 +361,23 @@ namespace charts
                 //Value = data.Last().pm2a
 
             });
+            firsta2.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm2a
+                //Value = data.Last().temp
+            });
             a10.Add(new MeasureModel
             {
                 Count = cc,
                 Value = data[data.Count - 1 - helper].Pm10a
                 //Value = data.Last().pm10a
+            });
+            firsta10.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm10a
+                //Value = data.Last().temp
             });
             h.Add(new MeasureModel
             {

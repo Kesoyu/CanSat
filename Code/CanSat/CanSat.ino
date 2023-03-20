@@ -58,7 +58,7 @@ void loop() {
         }
         state = action;
         testObject.transmitTransmitDataClass();
-        delay(30000);
+        delay(5000);
         break;
       case action:
         counter++;
