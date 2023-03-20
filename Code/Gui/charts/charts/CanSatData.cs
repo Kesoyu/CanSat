@@ -54,9 +54,9 @@ namespace charts
             public double Yellow;
             public double Green;
             public double Other;
-            public Data(string index, string temp, string pressure, string temperature, 
+            public Data(string index, string temp, string pressure, string temperature,
                         string ax, string ay, string az, string yaw, string roll, string pitch,
-                        string s1, string s2, string s10, string a1, string a2, string a10,string h, 
+                        string s1, string s2, string s10, string a1, string a2, string a10, string h,
                         string hour, string minute, string seconds, string year, string month, string day,
                         string latitude, string longitude, string lat, string lon, string altitude, string antenna,
                         string count, string blue, string yellow, string green, string other)
@@ -69,7 +69,7 @@ namespace charts
                 {
                     Temp = 0;
                 }
-                if(!double.TryParse(pressure.Replace('.', ','), out Pressure))
+                if (!double.TryParse(pressure.Replace('.', ','), out Pressure))
                 {
                     Pressure = 0;
                 }
@@ -153,11 +153,11 @@ namespace charts
                 {
                     Day = 0;
                 }
-                if (!double.TryParse(latitude, out Latitude))
+                if (!double.TryParse(latitude.Replace('.', ','), out Latitude))
                 {
                     Latitude = 0;
                 }
-                if (!double.TryParse(longitude, out Longitude))
+                if (!double.TryParse(longitude.Replace('.', ','), out Longitude))
                 {
                     Longitude = 0;
                 }
@@ -202,7 +202,7 @@ namespace charts
         List<Data> data = new List<Data>();
         public CanSatData()
         {
-            
+
         }
         public void ReadCSVData()
         {
@@ -222,29 +222,40 @@ namespace charts
             {
                 data.Add(new Data(csvReader.GetField(0), csvReader.GetField(1), csvReader.GetField(2), csvReader.GetField(3), csvReader.GetField(4),
                                   csvReader.GetField(5), csvReader.GetField(6), csvReader.GetField(7), csvReader.GetField(8), csvReader.GetField(9),
-                                  csvReader.GetField(10),csvReader.GetField(11),csvReader.GetField(12),csvReader.GetField(13),csvReader.GetField(14),
+                                  csvReader.GetField(10), csvReader.GetField(11), csvReader.GetField(12), csvReader.GetField(13), csvReader.GetField(14),
                                   csvReader.GetField(15), csvReader.GetField(16), csvReader.GetField(17), csvReader.GetField(18), csvReader.GetField(19),
                                   csvReader.GetField(20), csvReader.GetField(21), csvReader.GetField(22), csvReader.GetField(23), csvReader.GetField(24),
                                   csvReader.GetField(25), csvReader.GetField(26), csvReader.GetField(27), csvReader.GetField(28), csvReader.GetField(29),
                                   csvReader.GetField(30), csvReader.GetField(31), csvReader.GetField(32), csvReader.GetField(33)));
             }
         }
-        public void GetLastRecords(ChartValues<MeasureModel> t, ChartValues<MeasureModel> p, ChartValues<MeasureModel> x,
+        public void GetLastRecords(ChartValues<MeasureModel> t, ChartValues<MeasureModel> firstt, ChartValues<MeasureModel> p,
+                                   ChartValues<MeasureModel> firstp, ChartValues<MeasureModel> x,
                                    ChartValues<MeasureModel> y, ChartValues<MeasureModel> z, ChartValues<MeasureModel> yaw,
-                                   ChartValues<MeasureModel> roll, ChartValues<MeasureModel> pitch, ChartValues<MeasureModel> s1,
-                                   ChartValues<MeasureModel> s2, ChartValues<MeasureModel> s10, ChartValues<MeasureModel> a1,
-                                   ChartValues<MeasureModel> a2, ChartValues<MeasureModel> a10, ChartValues<MeasureModel> h,
+                                   ChartValues<MeasureModel> roll, ChartValues<MeasureModel> pitch,
+                                   ChartValues<MeasureModel> s1, ChartValues<MeasureModel> firsts1,
+                                   ChartValues<MeasureModel> s2, ChartValues<MeasureModel> firsts2,
+                                   ChartValues<MeasureModel> s10, ChartValues<MeasureModel> firsts10,
+                                   ChartValues<MeasureModel> a1, ChartValues<MeasureModel> firsta1,
+                                   ChartValues<MeasureModel> a2, ChartValues<MeasureModel> firsta2,
+                                   ChartValues<MeasureModel> a10, ChartValues<MeasureModel> firsta10, ChartValues<MeasureModel> h,
                                    double cc, out string time, out string date, out string lat, out string lon,
                                    out string count, out string blue, out string yellow, out string green, out string other,
                                    out double latitude, out double longitude)
         {
             ReadCSVData();
             int helper;
-            int.TryParse(""+cc, out helper);
+            int.TryParse("" + cc, out helper);
             t.Add(new MeasureModel
             {
                 Count = cc,
-                Value = data[data.Count-1-helper].Temp
+                Value = data[data.Count - 1 - helper].Temp
+                //Value = data.Last().temp
+            });
+            firstt.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Temp
                 //Value = data.Last().temp
             });
             p.Add(new MeasureModel
@@ -252,6 +263,12 @@ namespace charts
                 Count = cc,
                 Value = data[data.Count - 1 - helper].Pressure
                 //Value = data.Last().pressure
+            });
+            firstp.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pressure
+                //Value = data.Last().temp
             });
             x.Add(new MeasureModel
             {
@@ -295,11 +312,23 @@ namespace charts
                 Value = data[data.Count - 1 - helper].Pm1s
                 //Value = data.Last().pm1s
             });
+            firsts1.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm1s
+                //Value = data.Last().temp
+            });
             s2.Add(new MeasureModel
             {
                 Count = cc,
                 Value = data[data.Count - 1 - helper].Pm2s
                 //Value = data.Last().pm2s
+            });
+            firsts2.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm2s
+                //Value = data.Last().temp
             });
             s10.Add(new MeasureModel
             {
@@ -307,11 +336,23 @@ namespace charts
                 Value = data[data.Count - 1 - helper].Pm10s
                 //Value = data.Last().pm10s
             });
+            firsts10.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm10s
+                //Value = data.Last().temp
+            });
             a1.Add(new MeasureModel
             {
                 Count = cc,
                 Value = data[data.Count - 1 - helper].Pm1a
                 //Value = data.Last().pm1a
+            });
+            firsta1.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm1a
+                //Value = data.Last().temp
             });
             a2.Add(new MeasureModel
             {
@@ -320,11 +361,23 @@ namespace charts
                 //Value = data.Last().pm2a
 
             });
+            firsta2.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm2a
+                //Value = data.Last().temp
+            });
             a10.Add(new MeasureModel
             {
                 Count = cc,
                 Value = data[data.Count - 1 - helper].Pm10a
                 //Value = data.Last().pm10a
+            });
+            firsta10.Add(new MeasureModel
+            {
+                Count = cc,
+                Value = data.FirstOrDefault().Pm10a
+                //Value = data.Last().temp
             });
             h.Add(new MeasureModel
             {
