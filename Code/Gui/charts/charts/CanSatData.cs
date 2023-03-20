@@ -235,7 +235,8 @@ namespace charts
                                    ChartValues<MeasureModel> s2, ChartValues<MeasureModel> s10, ChartValues<MeasureModel> a1,
                                    ChartValues<MeasureModel> a2, ChartValues<MeasureModel> a10, ChartValues<MeasureModel> h,
                                    double cc, out string time, out string date, out string lat, out string lon,
-                                   out string count, out string blue, out string yellow, out string green, out string other)
+                                   out string count, out string blue, out string yellow, out string green, out string other,
+                                   out double latitude, out double longitude)
         {
             ReadCSVData();
             int helper;
@@ -341,6 +342,8 @@ namespace charts
             yellow = data[data.Count - 1 - helper].Yellow.ToString();
             green = data[data.Count - 1 - helper].Green.ToString();
             other = data[data.Count - 1 - helper].Other.ToString();
+            latitude = data[data.Count - 1 - helper].Latitude;
+            longitude = data[data.Count - 1 - helper].Longitude;
         }
     }
 }

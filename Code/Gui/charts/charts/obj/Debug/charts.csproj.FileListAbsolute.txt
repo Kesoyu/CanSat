@@ -76,3 +76,14 @@ C:\CanSat\Code\Gui\charts\charts\obj\Debug\charts.csproj.CoreCompileInputs.cache
 C:\CanSat\Code\Gui\charts\charts\obj\Debug\charts.csproj.CopyComplete
 C:\CanSat\Code\Gui\charts\charts\obj\Debug\charts.exe
 C:\CanSat\Code\Gui\charts\charts\obj\Debug\charts.pdb
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\MaterialDesignColors.dll
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\MaterialDesignThemes.Wpf.dll
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\Microsoft.Maps.MapControl.WPF.dll
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\Microsoft.Xaml.Behaviors.dll
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\MaterialDesignColors.pdb
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\MaterialDesignThemes.Wpf.pdb
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\MaterialDesignThemes.Wpf.xml
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\Microsoft.Maps.MapControl.WPF.xml
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\Microsoft.Xaml.Behaviors.pdb
+C:\CanSat\Code\Gui\charts\charts\bin\Debug\Microsoft.Xaml.Behaviors.xml
+C:\CanSat\Code\Gui\charts\charts\obj\Debug\App.baml

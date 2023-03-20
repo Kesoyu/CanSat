@@ -1,11 +1,13 @@
 ﻿using LiveCharts;
 using LiveCharts.Configurations;
+using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +16,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -154,6 +157,8 @@ namespace charts
                 string Yellow = string.Empty;
                 string Green = string.Empty;
                 string Other = string.Empty;
+                double Latitude = 0;
+                double Longitude = 0;
 
                 Thread.Sleep(1000);
                 var now = DateTime.Now;
@@ -168,10 +173,11 @@ namespace charts
                 canSatData.GetLastRecords(TemperatureValues, PressureValues, AccXValues, AccYValues, AccZValues,
                                           YawValues, RollValues, PitchValues, Pm1sValues, Pm2sValues, Pm10sValues,
                                           Pm1aValues, Pm2aValues, Pm10aValues, HallaValues, counter, out Time, out Date, out Lat, out Lon,
-                                          out Count, out Blue, out Yellow, out Green, out Other);
+                                          out Count, out Blue, out Yellow, out Green, out Other, out Latitude, out Longitude);
                 counter++;
                 SetGPS(Time, Date, Lat, Lon);
                 SetPixy(Count, Blue, Yellow, Green, Other);
+                SetMap(Latitude, Longitude);
                 //SetAxisLimits(now);
 
                 //lets only use the last 50 values
@@ -196,6 +202,12 @@ namespace charts
                     counter = 1;
                 }
             }
+        }
+        private void SetMap(double latitude, double longitude)
+        {
+            Dispatcher.Invoke(new Action(() => {
+                MapMap.Center = new Location(latitude, longitude);
+            }));
         }
         private void SetPixy(string count, string blue, string yellow, string green, string other)
         {
